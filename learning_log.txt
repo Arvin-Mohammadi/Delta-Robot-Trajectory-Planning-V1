@@ -1,0 +1,39 @@
+[2022, Tue, Jul 7]
+1. youtube videos (# OF VIDEOS: 1 videos | SUBJECT: trajectory optimization): 
+   - https://www.youtube.com/watch?v=wlkRYMVUZTs
+
+===================================================================================================================
+[2022, Tue, Jul 12]
+1. youtube videos (# OF VIDEOS: 3 videos | SUBJECT: how does a delta robot structure look and movements look like): 
+   - https://www.youtube.com/watch?v=3yUislC0aS0&ab_channel=OleksandrStepanenko
+   - https://www.youtube.com/watch?v=zSUQvTvmhtk&t=133s&ab_channel=DeltaTauDataSystems
+   - https://www.youtube.com/watch?v=FTRCwuAnr6o&t=7s&ab_channel=ProtoGEngineering
+
+2. robotics playlist (# OF VIDEOS: 5 videos (from 1 to 5) | SUBJECT: robotics):
+   - https://www.youtube.com/playlist?list=PLjx2FAhpTe3FGbcjBbxlhf56qVR0XbVNO
+
+3. pdf file (# OF DOCUMENTS: 1 pdf | SUBJECT: delta robot kinematics):
+   - Delta Robot Kinematics - Trossen Robotics
+===================================================================================================================
+[2022, Tue, Jul 14]
+
+
+1. robotics playlist (# OF VIDEOS: 5 videos (from 5 to 10) | SUBJECT: robotics):
+   - https://www.youtube.com/playlist?list=PLjx2FAhpTe3FGbcjBbxlhf56qVR0XbVNO
+===================================================================================================================
+[2022, Tue, Jul 15]
+
+1. pdf file (# OF DOCUMENTS: 2 pdf | SUBJECT: robotics):
+   - fundamentals of robtics (angles) - chapter 6: trajectory planning, pick and place opperations
+   - trajectory planning for automatice machines and robots - chapter 4
+
+2. trajectory planning python code development (point to point movement with 3rd deg polynomial)
+===================================================================================================================
+[2022, Tue, Jul 16]
+
+1. tutorials (# OF DOCUMENTS: 1 | SUBJECT: Delta robot kinematic derivation):
+   - https://www.marginallyclever.com/other/samples/fk-ik-test.html
+
+2. tutorials (# OF DOCUMENTS: 1 | SUBJECT: Delta robot python implementation):
+   - https://blog.devgenius.io/building-a-delta-robot-dash-app-9bb6e6577c27
+
