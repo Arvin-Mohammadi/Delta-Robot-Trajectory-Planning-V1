@@ -18,7 +18,7 @@
  
  2. after you get to know how FK and IK work, you should be able to derive these for the Delta pick-n-place robot, for IK you can 
     check this link out:
-    https://www.marginallyclever.com/other/samples/fk-ik-test.html
+    https://sites.google.com/site/deltarobotberkeley/how-it-works
 
  3. 
 

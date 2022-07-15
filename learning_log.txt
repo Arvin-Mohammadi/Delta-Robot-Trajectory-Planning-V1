@@ -32,7 +32,7 @@
 [2022, Tue, Jul 16]
 
 1. tutorials (# OF DOCUMENTS: 1 | SUBJECT: Delta robot kinematic derivation):
-   - https://www.marginallyclever.com/other/samples/fk-ik-test.html
+   - https://sites.google.com/site/deltarobotberkeley/how-it-works
 
 2. tutorials (# OF DOCUMENTS: 1 | SUBJECT: Delta robot python implementation):
    - https://blog.devgenius.io/building-a-delta-robot-dash-app-9bb6e6577c27
