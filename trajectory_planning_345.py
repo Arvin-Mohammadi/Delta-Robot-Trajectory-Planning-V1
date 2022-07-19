@@ -15,7 +15,7 @@ t = time.time()
 
 import numpy as np 
 import math 
-
+import matplotlib.pyplot as plt 
 print("time is:")
 print(time.time() - t)
 # =================================================================================================
@@ -99,7 +99,7 @@ class InverseKinematics:
 		# Gearbox ratio = 50, zero offset = 47.2 degree
 		self.theta = ((np.array(self.theta)*180/math.pi) + 47.2)*50
 		print(" this is theta with GR consideration")
-		print(self.theta)
+		
 		
 		return self.theta
 
@@ -108,22 +108,108 @@ class InverseKinematics:
 # =================================================================================================
 
 # in this part we want to move the End-Effector from 1 point to another using a 3-4-5 technique 
+# in this class the Given Data is: the first and final position of EE, the max value of V
+# and we give the, Desired Data: velocity profile
+
+class PointToPoint345Movement:
+	def __init__(self,EE_position_i, EE_position_f, theta_max=4050):
+		self.EE_position_i = EE_position_i
+		self.EE_position_f = EE_position_f
+		self.theta_max = theta_max*6		# by defaut = 424.115 rad/s = 4050 rpm
+		self.theta_i = np.zeros((3, 1))
+		self.theta_f = np.zeros((3, 1))
+
+
+	def inverse_kinematics(self):
+
+		# here we find the Initial and final theta from the Initial and final EE position 
+		active_rod = 0.2
+		passive_rod = 0.46
+		base_radius = 0.3464101615 
+		EE_radius = 0.2563435195 
+
+		Kinematics = InverseKinematics(self.EE_position_i, active_rod, passive_rod, base_radius, EE_radius)
+		Kinematics.get_J1_positions()
+
+		theta_i = Kinematics.get_theta()
+		
+		
+		Kinematics.EE_position_global = self.EE_position_f
+		Kinematics.get_J1_positions()
+		theta_f = Kinematics.get_theta()
+
+		for i in [0, 1, 2]:
+			self.theta_i[i] = theta_i[i]
+			self.theta_f[i] = theta_f[i]
+
+		print("this is the initial theta")
+		print(self.theta_i)
+		print(self.theta_i.size)
+		print("this is the final theta")
+		print(self.theta_f)
+		print(self.theta_f.size)
+
+	def T(self):
+		# here we find T(period) from the theta_max
+		self.T = 15/8*np.array(self.theta_f - self.theta_i)/self.theta_max
+		self.T = max(self.T)
+
+		print("this is T")
+		print(self.T)
+
+
+	def theta_dot_t(self):
+		T = math.floor(self.T*1000)
+		tau = np.array(range(0, T))/T
+		s_tau_d = 30*tau**4 - 60*tau**3 + 30*tau**2
+		print("this is size of s matrix")
+		print(s_tau_d)
+
+		self.theta_dot_t = np.array(self.theta_f - self.theta_i)/self.T*s_tau_d
+		print(self.theta_dot_t.shape)
+		print("this is theta dot t")
+		print(self.theta_dot_t)
+
+	def theta_t(self):
+		T = math.floor(self.T*1000)
+		tau = np.array(range(0, T))/T
+		s_tau = 6*tau**5 - 15*tau**4 + 10*tau**3
+
+		self.theta_t = np.array(self.theta_i) + np.array(self.theta_f - self.theta_i)*s_tau
+		print(self.theta_t.shape)
+		print("this is theta t")
+		print(self.theta_t)
 
 # =================================================================================================
 # -- main -----------------------------------------------------------------------------------------
 # =================================================================================================
 
-# Given Data:
-EE_position = [-0.05, 0.05, -0.4]
-active_rod = 0.2
-passive_rod = 0.46
-base_radius = 0.3464101615 
-EE_radius = 0.2563435195 
 
-Kinematics = InverseKinematics(EE_position, active_rod, passive_rod, base_radius, EE_radius)
-Kinematics.get_J1_positions()
-Kinematics.get_theta()
+movement = PointToPoint345Movement([0.05, 0.05, -0.31], [0, -0.15, -0.42])
+movement.inverse_kinematics()
+movement.T()
+movement.theta_dot_t()
+movement.theta_t()
 
-print("time is:")
-print(time.time() - t)
+T = math.floor(movement.T*1000)
+tau = np.array(range(0, T))/T
+plt.figure()
+plt.plot(tau, movement.theta_t.transpose())
+plt.figure()
+plt.plot(tau, movement.theta_dot_t.transpose())
 
+theta_t = movement.theta_t/6
+theta_dot_t = movement.theta_dot_t/6
+
+f = open("E:\\PointToPoint345.h", "a")
+f.write("float speeds_motor1[] = { 0")
+for i in range(1, T):
+	f.write(", " + str(theta_t[0][i])[:7])
+f.write("\nfloat speeds_motor2[] = { 0")
+
+for i in range(1, T):
+	f.write(", " + str(theta_t[1][i])[:7])
+f.write("\nfloat speeds_motor3[] = { 0")
+
+for i in range(1, T):
+	f.write(", " + str(theta_t[2][i])[:7])
