@@ -1,6 +1,6 @@
 # Delta_Robot
 
- this will be a step by step demostraion of how to get started with the delta robot
+ this will be a step by step demonstration of how to get started with the Delta robot
  more of my engineering stuff on this telegram channel: 
  https://t.me/engineering_stuff_69
 
@@ -9,6 +9,8 @@
  1. learning_log: | timeline of my activities to get started on robotics |
  
  2. trajectory_planning.py: | trajectory planning, point to point movement with 5rd order polynomial |
+ 
+ 3. inverse kinemtics (Delta robot).pdf: | this is the theory and math for inverse kinematics of the Delta robot |
 
 # step 1: THEORY
 
