@@ -39,3 +39,5 @@
    3. point to point movement (4-5-6-7 polynomial):
       we repeat what we've done for sub-step 2 but with a 7th order polynomial
 
+   4. circle movement, with cubic spline
+
