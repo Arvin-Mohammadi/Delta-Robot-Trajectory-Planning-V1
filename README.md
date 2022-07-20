@@ -8,9 +8,9 @@
 
  1. learning_log: | timeline of my activities to get started on robotics |
  
- 2. trajectory_planning.py: | trajectory planning, point to point movement with 5rd order polynomial |
+ 2. trajectory_planning_345.py: | trajectory planning, point to point movement with 5th order polynomial |
  
- 3. inverse kinemtics (Delta robot).pdf: | this is the theory and math for inverse kinematics of the Delta robot |
+ 3. trajectory_planning_4567.py: | trajectory planning, point to point movement with 7th order polynomial |
 
 # step 1: THEORY
 
