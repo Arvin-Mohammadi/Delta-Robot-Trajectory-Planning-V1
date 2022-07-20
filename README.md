@@ -4,13 +4,6 @@
  more of my engineering stuff on this telegram channel: 
  https://t.me/engineering_stuff_69
 
-# file categorization
-
- 1. learning_log: | timeline of my activities to get started on robotics |
- 
- 2. trajectory_planning_345.py: | trajectory planning, point to point movement with 5th order polynomial |
- 
- 3. trajectory_planning_4567.py: | trajectory planning, point to point movement with 7th order polynomial |
 
 # step 1: THEORY
 
@@ -22,8 +15,11 @@
     check this link out:
     https://sites.google.com/site/deltarobotberkeley/how-it-works
 
+    also there is what i used: "theory\Inverse Kinematics (Delta Robot).pdf"
+
  3. 
 
 # step 2: PYTHON IMPLEMENTATION 
 
- 1. 
+ 1. Inverse kinematics:
+   you'll find this in "python implementations\trajectory_planning_345.py" lines of 
