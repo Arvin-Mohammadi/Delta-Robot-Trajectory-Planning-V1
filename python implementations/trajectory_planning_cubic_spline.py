@@ -143,7 +143,35 @@ class Coeff:
 		self.T = self.t[1:self.n, :] - self.t[0:self.n-1, :]
 
 	def velocity(self):
-		# initializing c_prime and A_prime matrices
+		# initializing c_prime and A_prime matrices (last dimension is for the x, y, z directions)
+		A_prime = np.zeros((self.n-2, self.n-2, 3))
+		c_prime = np.zeros((self.n-2, 3))
+		T = self.T
+		
+		for i in range(A_prime.shape[0]):
+			
+			if i != 0:
+				A_prime[i, i-1, :] = T[i+1]
+			A_prime[i, i, :] = 2*(T[i] + T[i+1])
+			if i != A_prime.shape[0]-1:
+				A_prime[i, i+1, :] = T[i]
+
+		for i in range(A_prime.shape[0]):
+			c_prime[i, :] = 3/(T[i]*T[i+1])*(T[i]**2*(self.points[i+2, :] - self.points[i+1, :]) + T[i+1]**2*(self.points[i+1, :] - self.points[i, :]))
+
+		v = np.zeros((self.n-2, 3))
+		for i in [0, 1, 2]:
+			M = np.linalg.inv(A_prime[:, :, i])
+			N = c_prime[:, i]
+			print(M.shape)
+			print(N.shape)
+			v[:, i] = np.matmul(M, N)
+		
+		print("this is v")
+		print(v)
+		print(v.shape)
+
+		self.velo[1:self.n-1, :] = v
 
 
 	def coeff_matrix(self):
@@ -155,7 +183,7 @@ class Coeff:
 		
 		# assining the values of wrt position and velocity
 		self.coeff[:, :, 0] = self.points[0:self.n - 1, :]
-		self.coeff[:, :, 1] = self.velo[0:self.n - 1, :]
+		self.coeff[:, :, 1] = self.velo[0:self.n - 1, :] 
 		self.coeff[:, :, 2] = 1/self.T*( 3*(self.points[1:self.n, :] - self.points[0:self.n-1, :])/self.T - 2*self.velo[0:self.n-1, :] - self.velo[1:self.n, :])
 		self.coeff[:, :, 3] = 1/self.T**2*( 2*(- self.points[1:self.n, :] + self.points[0:self.n-1, :])/self.T + self.velo[0:self.n-1, :] + self.velo[1:self.n, :])
 
