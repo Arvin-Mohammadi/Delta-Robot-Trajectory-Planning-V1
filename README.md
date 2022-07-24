@@ -1,7 +1,7 @@
 # Delta_Robot
 
  this will be a step by step demonstration of how to get started with the Delta robot
- i recommend that you use the "step 2: PYTHON IMPLEMENTATION" and if you didn't have a clear idea of what the Theory is refer to "step 2: THEORY" for finding sources that help you understand what is the idea behind the python scripts
+ i recommend that you use the "step 2: PYTHON IMPLEMENTATION" and if you didn't have a clear idea of what the Theory isو refer to "step 2: THEORY" for finding sources that help you understand what is the idea behind the python scripts
  more of my engineering stuff on this telegram channel: 
  https://t.me/engineering_stuff_69
 
