@@ -1,6 +1,7 @@
 # Delta_Robot
 
  this will be a step by step demonstration of how to get started with the Delta robot
+ i recommend that you use the "step 2: PYTHON IMPLEMENTATION" and if you didn't have a clear idea of what the Theory is refer to "step 2: THEORY" for finding sources that help you understand what is the idea behind the python scripts
  more of my engineering stuff on this telegram channel: 
  https://t.me/engineering_stuff_69
 
@@ -20,24 +21,35 @@
    3. 3-4-5 polynomial and 4-5-6-7 polynomial point to point movement, you can learn about this in the book "Fundamentals of Robotic 
        Mechanical Systems, theory, methods, and Algorithms, Fourth Edition by Jorge Angeles - chapter 6"
 
-   4. cubic spline 
+   4. cubic spline (book Trajectory Planning for Automatix Machines and Robots by Luigi Biagiotti and Claudio Melchiorri)
+      1. cubic spline with assigned initial and final velocities (part 4.4.1)
+      2. cubic spline with assigned intial and final velocities and acceleration (part 4.4.4)
+      3. smoothing cubic spline (part 4.4.5)
 
 
 # step 2: PYTHON IMPLEMENTATION 
 
-   1. Inverse kinematics:
-      you'll find this in "python implementations\trajectory_planning_345.py" --> under the class InverseKinematics
+   1. INVERSE KINEMATICS:
+      finding the angles of the joints according to position of the end effector --> trajectory_planning_345.py
+
+      description:
       the whole idea is built around this concept of (where is the position of end-effector? so what configuration of joints can i use to get the end-effector to that position?)
 
-   2. point to point movement (3-4-5 polynomial):
-      in the file "python implementations\trajectory_planning_345.py" --> under the class PointToPoint345Movement
+   2. POINT TO POINT MOVEMENT (3-4-5 polynomial):
+      moveing from point to point in the direction desired --> trajectory_planning_345.py
+
+      description:
       the idea behind this is, we get the end-effector's position at the start and the finish, plus we get how much of the velocity do we want to actually use. 
       from positions we find the starting and final theta config. and from maximum angular velocity we find T(the time needed for the operation)
       then with the help of boundary conditions we find a 5th order polynomial called "s" as a function of time. 
       with the help of "s" polynomial we find theta and theta_dot as a function of time 
 
-   3. point to point movement (4-5-6-7 polynomial):
+   3. POINT TO POINT MOVEMENT (4-5-6-7 polynomial):
       we repeat what we've done for sub-step 2 but with a 7th order polynomial
 
-   4. circle movement, with cubic spline
+   4. CIRCLE MOVEMENT:
+      cubic spline with assigned initial and final velocities --> trajectory_planing_cubic_spline.py 
+
+      description: 
+      
 
