@@ -91,7 +91,7 @@ class InverseKinematics:
 			c2 = (yF - y0)/z0
 			c3 = -(c1 + c2*yF)*(c1 + c2*yF) + rf*(c2**2*rf + rf)
 			if c3 < 0:
-				print("non existing point")
+				print('\n non existing point \n')
 				self.J1_position = 0
 				return
 
@@ -190,9 +190,9 @@ class Coeff:
 		self.velo[self.n-1, :] = final_velo
 		self.velo[1:self.n-1, :] = v
 
-		print("this is A prime\n", A_prime)
-		print("this is c prime\n", c_prime)
-		print("this is velocity matrix\n", self.velo)
+		print("this is A prime:\n\n", A_prime)
+		print("\n\nthis is c prime:\n\n", c_prime)
+		print("\n\nthis is velocity matrix:\n\n", self.velo)
 
 	def coeff_matrix(self):
 		# initializing the coefficient matrix 
@@ -206,7 +206,8 @@ class Coeff:
 		self.coeff[:, :, 1] = self.velo[0:self.n - 1, :] 
 		self.coeff[:, :, 2] = 1/self.T*( 3*(self.points[1:self.n, :] - self.points[0:self.n-1, :])/self.T - 2*self.velo[0:self.n-1, :] - self.velo[1:self.n, :])
 		self.coeff[:, :, 3] = 1/self.T**2*( 2*(- self.points[1:self.n, :] + self.points[0:self.n-1, :])/self.T + self.velo[0:self.n-1, :] + self.velo[1:self.n, :])
-
+		
+		return self.coeff
 # =================================================================================================
 # -- POLYNOMIALS ----------------------------------------------------------------------------------
 # =================================================================================================
@@ -241,6 +242,20 @@ for i in range(n):
 	THETA[i, :] = theta
 
 print("this is THETA\n\n", THETA, "\n", type(THETA), "\n", THETA.shape)
+
+print("\n ============================= POLY COEFF ============================= \n")
+
+coeff = Coeff(THETA)
+coeff.velocity()
+coeff_matrix = coeff.coeff_matrix()
+
+print("\n this is polynomial coefficients matrix\n\n", coeff_matrix, "\n", type(coeff_matrix), "\n", coeff_matrix.shape)
+
+print("\n ============================= POLY DESCRETE POINTS ============================= \n")
+
+polynomial = Polynomial()
+final_points = polynomial.final_points()
+
 
 
 
