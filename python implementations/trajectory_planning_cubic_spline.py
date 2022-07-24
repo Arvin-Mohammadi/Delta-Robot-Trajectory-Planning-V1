@@ -108,15 +108,16 @@ class PositionGenerator:
 
 	def __init__(self, ratio, center, n=100):
 		pi = math.pi
-
+		self.n = n
 		self.ratio = ratio		# r
 		self.center = center	# xc, yc, zc
-		self.gamma = np.linspace(0, 2*pi, num=100)
+		self.gamma = np.linspace(0, 2*pi, num=self.n)
 
-		# self.points is the positions of the n points and it is a n*3 matrix
-		self.points = np.array([np.cos(self.gamma)*self.ratio, np.sin(self.gamma)*self.ratio, np.ones((100))*self.center[2]])
+		# self.points is the positions of the n points in x, y and z directions (n*3 matrix)
+		self.points = np.array([np.cos(self.gamma)*self.ratio, np.sin(self.gamma)*self.ratio, np.ones((self.n))*self.center[2]])
 		self.points = np.transpose(self.points)
 
+		print("this is the points position shape", self.points.shape)
 
 # =================================================================================================
 # -- polynomial coeffs ----------------------------------------------------------------------------
@@ -137,7 +138,7 @@ class Coeff:
 
 		# time value assignment, shape = n*3
 		for i in [0, 1, 2]:
-			self.t[:, i] = np.linspace(0, self.n, num=100)
+			self.t[:, i] = np.linspace(0, self.n, num=self.n)
 		
 		# time intervals (T), shape = n-1*3
 		self.T = self.t[1:self.n, :] - self.t[0:self.n-1, :]
@@ -163,13 +164,7 @@ class Coeff:
 		for i in [0, 1, 2]:
 			M = np.linalg.inv(A_prime[:, :, i])
 			N = c_prime[:, i]
-			print(M.shape)
-			print(N.shape)
 			v[:, i] = np.matmul(M, N)
-		
-		print("this is v")
-		print(v)
-		print(v.shape)
 
 		self.velo[1:self.n-1, :] = v
 
@@ -181,7 +176,7 @@ class Coeff:
 		# dim 3 == number of coeff in the polynomial 	--> (e.g: a[k][0][m] that m=0,1,2,3 is for the k_th point in x direction)
 		self.coeff = np.zeros((self.n-1, 3, 4)) 
 		
-		# assining the values of wrt position and velocity
+		# assigning the values of wrt position and velocity
 		self.coeff[:, :, 0] = self.points[0:self.n - 1, :]
 		self.coeff[:, :, 1] = self.velo[0:self.n - 1, :] 
 		self.coeff[:, :, 2] = 1/self.T*( 3*(self.points[1:self.n, :] - self.points[0:self.n-1, :])/self.T - 2*self.velo[0:self.n-1, :] - self.velo[1:self.n, :])
