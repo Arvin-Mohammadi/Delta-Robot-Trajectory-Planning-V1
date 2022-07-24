@@ -10,6 +10,7 @@
 # =================================================================================================
 
 import time
+from typing import final
 t = time.time()
 
 import numpy as np 
@@ -114,10 +115,8 @@ class PositionGenerator:
 		self.gamma = np.linspace(0, 2*pi, num=self.n)
 
 		# self.points is the positions of the n points in x, y and z directions (n*3 matrix)
-		self.points = np.array([np.cos(self.gamma)*self.ratio, np.sin(self.gamma)*self.ratio, np.ones((self.n))*self.center[2]])
+		self.points = np.array([np.cos(self.gamma)*self.ratio + np.ones((self.n))*self.center[0], np.sin(self.gamma)*self.ratio + np.ones((self.n))*self.center[1], np.ones((self.n))*self.center[2]])
 		self.points = np.transpose(self.points)
-
-		print("this is the points position shape", self.points.shape)
 
 # =================================================================================================
 # -- polynomial coeffs ----------------------------------------------------------------------------
@@ -131,7 +130,7 @@ class Coeff:
 
 		# initialzing the postion, velocity and acceleration vectors 
 		# all of the vectors are n*3 matrices (e.g: for v we have 3 components in x, y and z direction)
-		self.points = points
+		self.points = np.array(points)
 		self.velo = np.zeros(self.points.shape)
 		self.t = np.zeros(self.points.shape)
 		self.n = self.points.shape[0]
@@ -143,31 +142,41 @@ class Coeff:
 		# time intervals (T), shape = n-1*3
 		self.T = self.t[1:self.n, :] - self.t[0:self.n-1, :]
 
-	def velocity(self):
+	def velocity(self, initial_velo=[0, 0, 0], final_velo=[0, 0, 0]):
 		# initializing c_prime and A_prime matrices (last dimension is for the x, y, z directions)
-		A_prime = np.zeros((self.n-2, self.n-2, 3))
+		A_prime = np.zeros((3, self.n-2, self.n-2))
 		c_prime = np.zeros((self.n-2, 3))
 		T = self.T
 		
-		for i in range(A_prime.shape[0]):
-			
+		# makin the A_prime and c_prime matrices 
+		for i in range(A_prime.shape[1]):
 			if i != 0:
-				A_prime[i, i-1, :] = T[i+1]
-			A_prime[i, i, :] = 2*(T[i] + T[i+1])
-			if i != A_prime.shape[0]-1:
-				A_prime[i, i+1, :] = T[i]
+				A_prime[:, i, i-1] = T[i+1]
+			A_prime[:, i, i] = 2*(T[i] + T[i+1])
+			if i != A_prime.shape[1]-1:
+				A_prime[:, i, i+1] = T[i]
 
-		for i in range(A_prime.shape[0]):
+		for i in range(A_prime.shape[1]):
 			c_prime[i, :] = 3/(T[i]*T[i+1])*(T[i]**2*(self.points[i+2, :] - self.points[i+1, :]) + T[i+1]**2*(self.points[i+1, :] - self.points[i, :]))
+			if i == 0:
+				c_prime[i, :] -= T[i+1]*initial_velo
+			elif i == A_prime.shape[1]-1:
+				c_prime[i, :] -= T[i]*final_velo
 
+		# calculating v vector from A_prime and C_prime matrices 
 		v = np.zeros((self.n-2, 3))
 		for i in [0, 1, 2]:
-			M = np.linalg.inv(A_prime[:, :, i])
+			M = np.linalg.inv(A_prime[i, :, :])
 			N = c_prime[:, i]
 			v[:, i] = np.matmul(M, N)
 
+		self.velo[0, :] = initial_velo
+		self.velo[self.n-1, :] = final_velo
 		self.velo[1:self.n-1, :] = v
 
+		print("this is A prime\n", A_prime)
+		print("this is c prime\n", c_prime)
+		print("this is velocity matrix\n", self.velo)
 
 	def coeff_matrix(self):
 		# initializing the coefficient matrix 
@@ -183,9 +192,39 @@ class Coeff:
 		self.coeff[:, :, 3] = 1/self.T**2*( 2*(- self.points[1:self.n, :] + self.points[0:self.n-1, :])/self.T + self.velo[0:self.n-1, :] + self.velo[1:self.n, :])
 
 # =================================================================================================
-# -- main ----------------------------------------------------------------------------
+# -- main -----------------------------------------------------------------------------------------
 # =================================================================================================
 
+
+# -- TEST -----------------------------------------------------------------------------------------
+
+print (" \n ==================== TEST ==================== \n ")
+# overwriting the points generator
+generator = PositionGenerator(1, [0, 0, -0.5])
+points = generator.points
+points = np.array([[3, 0, 0], [-2, 0, 0], [-5, 0, 0], [0, 0, 0], [6, 0, 0], [12, 0, 0], [8, 0, 0]])
+
+# initializing the coeff class
+coeff = Coeff(points)
+
+# overwriting the coeff.t
+coeff.t = [[0, 0, 0], [5, 5, 5], [7, 7, 7], [8, 8, 8], [10, 10, 10], [15, 15, 15], [18, 18, 18]]
+coeff.t = np.array(coeff.t)
+coeff.T = coeff.t[1:coeff.n, :] - coeff.t[0:coeff.n-1, :] # re-calculating the T values 
+coeff.T = np.array(coeff.T)
+
+# velocity matrix calculation
+coeff.velocity(initial_velo=[2, 0, 0], final_velo=[-3, 0, 0])
+
+# coeff matrix calculation
+coeff.coeff_matrix()
+
+print("time is:")
+print(time.time() - t)
+
+# -- CIRCLE TEST -----------------------------------------------------------------------------------
+
+print (" \n ==================== CIRCLE TEST ==================== \n ")
 generator = PositionGenerator(1, [0, 0, -0.5])
 points = generator.points
 
