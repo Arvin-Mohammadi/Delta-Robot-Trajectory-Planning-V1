@@ -6,7 +6,7 @@
 # 4. intial and final velocity zero --> 2 		conditions
 
 # =================================================================================================
-# -- imports --------------------------------------------------------------------------------------
+# -- IMPORTS --------------------------------------------------------------------------------------
 # =================================================================================================
 
 import time
@@ -20,8 +20,22 @@ import matplotlib.pyplot as plt
 print("time is:")
 print(time.time() - t)
 
+
 # =================================================================================================
-# -- inverse kinematic class ----------------------------------------------------------------------
+# -- FORWARD KINEMATICS ---------------------------------------------------------------------------
+# =================================================================================================
+
+# here we have the angles of the joints (theta1, theta2, theta3)
+# our goal is to find the position of the end effector (EE center position)
+
+class ForwardKinematics:
+
+	def __init__ (self, theta):
+		self.theta = theta 
+
+
+# =================================================================================================
+# -- INVERSE KINEMATICS ---------------------------------------------------------------------------
 # =================================================================================================
 
 # here we have the EE position and the lengths of rods and basic geometry
@@ -29,7 +43,7 @@ print(time.time() - t)
 
 class InverseKinematics:
 
-	def __init__(self, EE_position, active_rod, passive_rod, base_radius, EE_radius, alpha=[0, 120, 240]):
+	def __init__(self, EE_position, active_rod=0.2, passive_rod=0.46, base_radius=0.3464101615, EE_radius=0.2563435195, alpha=[0, 120, 240]):
 		# initializing the basic geometry and the given data
 
 		self.alpha = np.array(alpha)							# alpha angles
@@ -86,7 +100,7 @@ class InverseKinematics:
 			self.J1_position[i] = [0, y, z]
 	
 	def get_theta(self):
-		self.theta = [0, 0, 0]
+		self.theta = np.zeros((3))
 		for i in [0, 1, 2]:
 			z_J1 = self.J1_position[i][2]
 			y_J1 = self.J1_position[i][1]
@@ -100,7 +114,7 @@ class InverseKinematics:
 		return self.theta
 
 # =================================================================================================
-# -- position generator ---------------------------------------------------------------------------
+# -- POSITION GENERATOR ---------------------------------------------------------------------------
 # =================================================================================================
 
 # in this part we try to generate a circle and get n sample points from that circle.
@@ -114,12 +128,13 @@ class PositionGenerator:
 		self.center = center	# xc, yc, zc
 		self.gamma = np.linspace(0, 2*pi, num=self.n)
 
+	def cart_position(self):
 		# self.points is the positions of the n points in x, y and z directions (n*3 matrix)
 		self.points = np.array([np.cos(self.gamma)*self.ratio + np.ones((self.n))*self.center[0], np.sin(self.gamma)*self.ratio + np.ones((self.n))*self.center[1], np.ones((self.n))*self.center[2]])
 		self.points = np.transpose(self.points)
-
+		return self.points
 # =================================================================================================
-# -- polynomial coeffs ----------------------------------------------------------------------------
+# -- POLYNOMIAL COEFFICIENT MATRIX ----------------------------------------------------------------
 # =================================================================================================
 
 # using the boundary conditions we find a[k][i] for k = 0, ..., n and i = 0, 1, 2, 3
@@ -192,45 +207,40 @@ class Coeff:
 		self.coeff[:, :, 3] = 1/self.T**2*( 2*(- self.points[1:self.n, :] + self.points[0:self.n-1, :])/self.T + self.velo[0:self.n-1, :] + self.velo[1:self.n, :])
 
 # =================================================================================================
-# -- main -----------------------------------------------------------------------------------------
+# -- POLYNOMIALS ----------------------------------------------------------------------------------
 # =================================================================================================
 
+# here we want to get the coefficient matrix and then build the polynomials accordingly.
+# after that we calculate a number of discrete points with this method of interpolation.
 
-# -- TEST -----------------------------------------------------------------------------------------
+class Polynomial:
 
-print (" \n ==================== TEST ==================== \n ")
-# overwriting the points generator
-generator = PositionGenerator(1, [0, 0, -0.5])
-points = generator.points
-points = np.array([[3, 0, 0], [-2, 0, 0], [-5, 0, 0], [0, 0, 0], [6, 0, 0], [12, 0, 0], [8, 0, 0]])
+	def __init__(self, coeff_matrix):
+		self.coeff = coeff_matrix
 
-# initializing the coeff class
-coeff = Coeff(points)
+# =================================================================================================
+# -- MAIN ----------------------------------------------------------------------------------
+# =================================================================================================
 
-# overwriting the coeff.t
-coeff.t = [[0, 0, 0], [5, 5, 5], [7, 7, 7], [8, 8, 8], [10, 10, 10], [15, 15, 15], [18, 18, 18]]
-coeff.t = np.array(coeff.t)
-coeff.T = coeff.t[1:coeff.n, :] - coeff.t[0:coeff.n-1, :] # re-calculating the T values 
-coeff.T = np.array(coeff.T)
+print("\n ============================= START ============================= \n")
 
-# velocity matrix calculation
-coeff.velocity(initial_velo=[2, 0, 0], final_velo=[-3, 0, 0])
+generator = PositionGenerator(0.3, [0, 0, -0.38], n=100)
+cart_position = generator.cart_position()
 
-# coeff matrix calculation
-coeff.coeff_matrix()
+print("this is our cartesian positions \n\n", cart_position, "\n", type(cart_position), "\n", cart_position.shape, "\n")
 
-print("time is:")
-print(time.time() - t)
+print("\n ============================= INVERSE ============================= \n")
 
-# -- CIRCLE TEST -----------------------------------------------------------------------------------
+n = cart_position.shape[0] # number of points in the cartesian position
+THETA = np.zeros((n, 3)) # theta initialization for n points in 3 directions (theta1, theta2, theta3)
+for i in range(n):
+	inverse = InverseKinematics(cart_position[i])
+	inverse.get_J1_positions()
+	theta = inverse.get_theta()
+	THETA[i, :] = theta
 
-print (" \n ==================== CIRCLE TEST ==================== \n ")
-generator = PositionGenerator(1, [0, 0, -0.5])
-points = generator.points
+print("this is THETA\n\n", THETA, "\n", type(THETA), "\n", THETA.shape)
 
-coeff = Coeff(points)
-coeff.velocity()
-coeff.coeff_matrix()
 
-print("time is:")
-print(time.time() - t)
+
+	
