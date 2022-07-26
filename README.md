@@ -30,13 +30,13 @@
 # step 2: PYTHON IMPLEMENTATION 
 
    1. INVERSE KINEMATICS:
-      finding the angles of the joints according to position of the end effector --> trajectory_planning_345.py
+      finding the angles of the joints according to position of the end effector --> [trajectory_planning_345.py](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/python%20implementations/trajectory_planning_345.py)
 
       description:
       the whole idea is built around this concept of (where is the position of end-effector? so what configuration of joints can i use to get the end-effector to that position?)
 
    2. POINT TO POINT MOVEMENT (3-4-5 polynomial):
-      moveing from point to point in the direction desired --> trajectory_planning_345.py
+      moveing from point to point in the direction desired --> [trajectory_planning_345.py](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/python%20implementations/trajectory_planning_345.py)
 
       description:
       the idea behind this is, we get the end-effector's position at the start and the finish, plus we get how much of the velocity do we want to actually use. 
@@ -45,11 +45,14 @@
       with the help of "s" polynomial we find theta and theta_dot as a function of time 
 
    3. POINT TO POINT MOVEMENT (4-5-6-7 polynomial):
-      we repeat what we've done for sub-step 2 but with a 7th order polynomial
+      we repeat what we've done for sub-step 2 but with a 7th order polynomial --> [trajectory_planning_4567.py](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/python%20implementations/trajectory_planning_4567.py)
 
    4. CIRCLE MOVEMENT:
-      cubic spline with assigned initial and final velocities --> trajectory_planing_cubic_spline.py 
+      cubic spline with assigned initial and final velocities --> [trajectory_planing_cubic_spline.py](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/python%20implementations/trajectory_planning_cubic_spline.py)
 
       description: 
-      
+  5. CIRCLE MOVEMENT:
+      cubic spline with assigned initial and final velocities and acceleration --> [trajectory_planing_cubic_spline_4.4.4.py](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/python%20implementations/trajectory_planning_cubic_spline_4.4.4.py)
+
+      description: 
 
