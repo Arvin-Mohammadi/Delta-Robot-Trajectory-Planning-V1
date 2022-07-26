@@ -1,17 +1,16 @@
 # in this file i attempt making a trajectory generator which makes the Delta robot go around a circle 
-# the boundary conditions are as followed: 
-# 1. continuity on the position 	--> 2n 		conditions
-# 2. continuity on the velocity 	--> n - 1 	conditions 
-# 3. continuity on the acceleration --> n - 1 	conditions 
-# 4. intial and final velocity zero --> 2 		conditions
+# the boundary conditions are as followed: (we have n-1 points in the trajectory and then we add another 2 ponits)
+# 1. continuity on the position 		 --> 2n-2 	conditions
+# 2. continuity on the velocity 		 --> n-2 	conditions 
+# 3. continuity on the acceleration 	 --> n-2 	conditions 
+# 4. initial and final velocity zero 	 --> 2 		conditions
+# 5. initial and final acceleration zero --> 2 		conditions
 
 # =================================================================================================
 # -- IMPORTS --------------------------------------------------------------------------------------
 # =================================================================================================
 
-from http.cookiejar import LWPCookieJar
 import time
-from typing import final
 t = time.time()
 
 import numpy as np 
@@ -20,35 +19,6 @@ import matplotlib.pyplot as plt
 
 print("time is:")
 print(time.time() - t)
-
-
-# =================================================================================================
-# -- FORWARD KINEMATICS ---------------------------------------------------------------------------
-# =================================================================================================
-			# NOT COMPLETE
-# here we have the angles of the joints (theta1, theta2, theta3)
-# our goal is to find the position of the end effector (EE center position)
-
-class ForwardKinematics:
-
-	def __init__ (self, theta, active_rod=0.2, passive_rod=0.46, base_radius=0.3464101615, EE_radius=0.2563435195, alpha=[0, 120, 240]):
-		# constants 
-		e = EE_radius
-		f = base_radius
-		re = passive_rod
-		rf = active_rod
-
-		sqrt3 = 3**0.5
-		pi = math.pi
-		sin120 = math.sin(120 * pi /180)
-		cos120 = -0.5 
-		tan60 = sqrt3
-		sin30 = 0.5
-		tan30 = 1/sqrt3
-
-		self.theta = theta # theta1 theta2 theta3 matrix is of shape (n, 3)
-		self.n = self.theta.shape[0]
-
 
 
 # =================================================================================================
@@ -134,7 +104,8 @@ class InverseKinematics:
 # -- POSITION GENERATOR ---------------------------------------------------------------------------
 # =================================================================================================
 
-# in this part we try to generate a circle and get n sample points from that circle.
+# in this part we try to generate a circle and get n sample points from that circle. 
+# this results in having n-1 cartesian points (matrix.shape=(n-1, 3))
 
 class PositionGenerator:
 
@@ -145,11 +116,11 @@ class PositionGenerator:
 		self.n = int(n)
 		self.ratio = ratio		# r
 		self.center = center	# xc, yc, zc
-		self.gamma = np.linspace(0, 2*pi, num=self.n)
+		self.gamma = np.linspace(0, 2*pi, num=self.n-1)
 
 	def cart_position(self):
 		# self.points is the positions of the n points in x, y and z directions (n*3 matrix)
-		self.points = np.array([np.cos(self.gamma)*self.ratio + np.ones((self.n))*self.center[0], np.sin(self.gamma)*self.ratio + np.ones((self.n))*self.center[1], np.ones((self.n))*self.center[2]])
+		self.points = np.array([np.cos(self.gamma)*self.ratio + np.ones((self.n-1))*self.center[0], np.sin(self.gamma)*self.ratio + np.ones((self.n-1))*self.center[1], np.ones((self.n-1))*self.center[2]])
 		self.points = np.transpose(self.points)
 		return self.points
 
@@ -157,99 +128,93 @@ class PositionGenerator:
 # -- POLYNOMIAL COEFFICIENT MATRIX ----------------------------------------------------------------
 # =================================================================================================
 
-# using the boundary conditions we find a[k][i] for k = 0, ..., n and i = 0, 1, 2, 3
+# Give data: n-1 points
+
+# first step: making the n-1 points into n+1 points (adding q_1 and q_(n-1))
+# second step: 
 
 class Coeff:
 
-	def __init__(self, points):
+	def __init__(self, points, intial_velo=[0, 0, 0], final_velo=[0, 0, 0], initial_acc=[0, 0, 0], final_acc=[0, 0, 0]):
 
 		# initialzing the postion, velocity and acceleration vectors 
 		# all of the vectors are n*3 matrices (e.g: for v we have 3 components in x, y and z direction)
 		self.points = np.array(points)
-		self.velo = np.zeros(self.points.shape)
 		self.t = np.zeros(self.points.shape)
-		self.n = self.points.shape[0]
+		self.n = self.points.shape[0] + 1
+		self.vi = np.array(intial_velo)
+		self.vf = np.array(final_velo)
+		self.ai = np.array(initial_acc)
+		self.af = np.array(final_acc)
 
-		# time value assignment, shape = n*3
+		# time value assignment, shape = n*3 it is measured in milisecond
 		for i in [0, 1, 2]:
-			self.t[:, i] = np.linspace(0, self.n, num=self.n)
+			self.t[:, i] = np.linspace(0, self.n, num=self.n-1)
 		
-		# time intervals (T), shape = n-1*3
-		self.T = self.t[1:self.n, :] - self.t[0:self.n-1, :]
+		# # initializing t-bar matrix  
+		# self.t_bar = np.zeros((self.t.shape[0]+2, self.t.shape[1]))
+		# # assigning values to t-bar matrix
+		# self.t_bar[0, :] = self.t[0, :]
+		# self.t_bar[2:self.n-1, :] = self.t[1:self.n-2]
+		# self.t_bar[self.n, :] = self.t[self.n-2, :]
+		# t_1 = (self.t[0, :] + self.t[1, :])/2
+		# t_n_minus_1 = (self.t[self.n-3, :] + self.t[self.n-2, :])/2
+		# self.t_bar[[1, self.n-1], :] = [t_1, t_n_minus_1]
 
-	def velocity(self, initial_velo=[0, 0, 0], final_velo=[0, 0, 0]):
-		# initializing c_prime and A_prime matrices (last dimension is for the x, y, z directions)
-		A_prime = np.zeros((3, self.n-2, self.n-2))
-		c_prime = np.zeros((self.n-2, 3))
-		T = self.T
-		
-		# makin the A_prime and c_prime matrices 
-		for i in range(A_prime.shape[1]):
-			if i != 0:
-				A_prime[:, i, i-1] = T[i+1]
-			A_prime[:, i, i] = 2*(T[i] + T[i+1])
-			if i != A_prime.shape[1]-1:
-				A_prime[:, i, i+1] = T[i]
+		# intializing the T matrix (time intervals)
+		self.T = np.zeros((self.n, 3))
+		# assigning values to T matrix 
+		self.T = self.t[1:self.n-1, :] - self.t[0:self.n-2, :] # changed
 
-		for i in range(A_prime.shape[1]):
-			c_prime[i, :] = 3/(T[i]*T[i+1])*(T[i]**2*(self.points[i+2, :] - self.points[i+1, :]) + T[i+1]**2*(self.points[i+1, :] - self.points[i, :]))
-			if i == 0:
-				c_prime[i, :] -= T[i+1]*initial_velo
-			elif i == A_prime.shape[1]-1:
-				c_prime[i, :] -= T[i]*final_velo
+		# # initializing q-bar matrix
+		# self.q_bar = np.zeros((self.points.shape[0]+2, self.points.shape[1]))
+		# # assigning values to q-bar matrix with out assigning q_1 and q_n_minut_1
+		# self.q_bar[0, :] = self.points[0, :]
+		# self.q_bar[2:self.n-1, :] = self.points[1:self.n-2]
+		# self.q_bar[self.n, :] = self.points[self.n-2, :]
 
-		# calculating v vector from A_prime and C_prime matrices 
-		v = np.zeros((self.n-2, 3))
+	def get_omega(self):
+		# initializing the c matrix 
+		c = np.zeros((self.n-1, 3))
+		# assigning the values to the c matrix 
+		c[0, :] = (self.points[2, :] - self.points[0, :])/self.T[1, :] - self.vi*(1 + self.T[0, :]/self.T[1, :]) - self.ai*(0.5 + self.T[0, :]/(3*self.T[1, :]))*self.T[0, :]
+		c[1, :] = (self.points[3, :] - self.points[2, :])/self.T[2, :] - (self.points[2, :] - self.points[0, :])/self.T[1, :] + self.vi*self.T[0, :]/self.T[1, :] + self.ai*self.T[0, :]**2/(3*self.T[1, :])
+		c[2:self.n-3, :] = (self.points[4:self.n-1, :] - self.points[3:self.n-2, :])/self.T[3:self.n-2, :] - (self.points[3:self.n-2, :] - self.points[2:self.n-3, :])/self.T[2:self.n-3, :]
+		c[self.n-3, :] = (self.points[self.n-2, :] - self.points[self.n-4, :])/self.T[self.n-4, :] - (self.points[self.n-4, :] - self.points[self.n-5, :])/self.T[self.n-5, :] - self.vf*self.T[self.n-3, :]/self.T[self.n-4, :] + self.af*self.T[self.n-3, :]**2/(3*self.T[self.n-4, :]) # changed
+		c[self.n-2, :] = ( - self.points[self.n-2, :] + self.points[self.n-4, :])/self.T[self.n-4, :] + self.vf*(1 + self.T[self.n-3 ,:]/self.T[self.n-4, :]) - self.af*(0.5 + self.T[self.n-3, :]/(3*self.T[self.n-4]))*self.T[self.n-3, :] # changed 
+		c = c*6
+
+		# initializing the A matrix 
+		A = np.zeros((3, self.n-1,self.n-1))
+		# assigning the values to the A matrix 
+		for i in range(1, A.shape[1]-3): # changed
+			A[:, i-1, i] = self.T[i]
+			A[:, i, i] = 2*(self.T[i] + self.T[i+1])
+			A[:, i+1, i] = self.T[i+1]
+		A[:, 0, 0] = 2*self.T[1] + self.T[0]*(3 + self.T[0]/self.T[1])
+		A[:, 1, 0] = self.T[1] - self.T[0]**2/self.T[2]
+		A[:, self.n-4, self.n-4] = 2*self.T[self.n-4] + self.T[self.n-3]*(3 + self.T[self.n-3]/self.T[self.n-4]) # changed
+		A[:, self.n-5, self.n-4] = self.T[self.n-4] - self.T[self.n-3]**2/self.T[self.n-4]	# changed 
+
+		print("\nthis is A\n\n")
+		print(A)
+		print(A.shape)
+		print("\n this is c matrix\n\n")
+		print(c)
+		print(c.shape)
+		# initializing omega matrix 
+		self.omega = np.zeros((self.n-1, 3))
 		for i in [0, 1, 2]:
-			M = np.linalg.inv(A_prime[i, :, :])
-			N = c_prime[:, i]
-			v[:, i] = np.matmul(M, N)
-
-		self.velo[0, :] = initial_velo
-		self.velo[self.n-1, :] = final_velo
-		self.velo[1:self.n-1, :] = v
-
-		print("this is A prime:\n\n", A_prime)
-		print("\n\nthis is c prime:\n\n", c_prime)
-		print("\n\nthis is velocity matrix:\n\n", self.velo)
-
-	def coeff_matrix(self):
-		# initializing the coefficient matrix 
-		# dim 1 == number of polynomials 				--> k = 0, ..., n-2
-		# dim 2 == number of x, y, z directions 		--> 3
-		# dim 3 == number of coeff in the polynomial 	--> (e.g: a[k][0][m] that m=0,1,2,3 is for the k_th point in x direction)
-		self.coeff = np.zeros((self.n-1, 3, 4)) 
+			M = np.linalg.inv(A[i, :, :])
+			N = c[:, i]
+			self.omega[:, i] = np.matmul(M, N)
 		
-		# assigning the values of wrt position and velocity
-		self.coeff[:, :, 0] = self.points[0:self.n - 1, :]
-		self.coeff[:, :, 1] = self.velo[0:self.n - 1, :] 
-		self.coeff[:, :, 2] = 1/self.T*( 3*(self.points[1:self.n, :] - self.points[0:self.n-1, :])/self.T - 2*self.velo[0:self.n-1, :] - self.velo[1:self.n, :])
-		self.coeff[:, :, 3] = 1/self.T**2*( 2*(- self.points[1:self.n, :] + self.points[0:self.n-1, :])/self.T + self.velo[0:self.n-1, :] + self.velo[1:self.n, :])
 		
-		return self.coeff
-
-# =================================================================================================
-# -- POLYNOMIALS ----------------------------------------------------------------------------------
-# =================================================================================================
-
-# here we want to get the coefficient matrix and then build the polynomials accordingly.
-# after that we calculate a number of discrete points with this method of interpolation.
-
-class Polynomial:
-
-	def __init__(self, coeff_matrix, T):
-		
-		self.coeff = coeff_matrix
-		self.T = T
-		self.n = self.coeff.shape[0] + 1
-		
-		# initializing the polynomial matrix
-		self.poly_matrix = np.zeros((self.n, 3))
-		self.poly_matrix[0, :] = self.coeff[0, :, 0]
-		self.poly_matrix[1:, :] = self.coeff[:, :, 0] + self.coeff[:, :, 1]*self.T + self.coeff[:, :, 2]*self.T**2 + self.coeff[:, :, 3]*self.T**3
-		
-		print("\n this is polynomial matrix\n\n", self.poly_matrix, "\n", type(self.poly_matrix), "\n", self.poly_matrix.shape)
-
+		print("\n this is omega \n\n")
+		print(self.omega)
+		print(self.omega.shape)
+		return self.omega
+	
 # =================================================================================================
 # -- MAIN -----------------------------------------------------------------------------------------
 # =================================================================================================
@@ -275,13 +240,22 @@ print("this is THETA\n\n", THETA, "\n", type(THETA), "\n", THETA.shape)
 
 print("\n ============================= POLY COEFF ============================= \n")
 
-coeff = Coeff(THETA)
-coeff.velocity()
-coeff_matrix = coeff.coeff_matrix()
-T = coeff.T
+#coeff = Coeff(THETA)
+#coeff.get_omega()
+#print("\n this is polynomial coefficients matrix\n\n", coeff_matrix, "\n", type(coeff_matrix), "\n", coeff_matrix.shape)
+	
+# =================================================================================================
+# -- TEST -----------------------------------------------------------------------------------------
+# =================================================================================================
 
-print("\n this is polynomial coefficients matrix\n\n", coeff_matrix, "\n", type(coeff_matrix), "\n", coeff_matrix.shape)
+print("\n ============================= TEST ============================= \n")
 
-print("\n ============================= POLY DESCRETE POINTS ============================= \n")
+points = [[3, 0, 0], [-2, 0, 0], [-5, 0, 0], [0, 0, 0], [6, 0, 0], [12, 0, 0], [8, 0, 0]]
 
-polynomial = Polynomial(coeff_matrix, T)
+coeff = Coeff(points)
+coeff.t = [[0, 0, 0], [2.5, 2.5, 2.5], [5, 5, 5], [7, 7, 7], [8, 8, 8], [10, 10, 10], [15, 15, 15], [16.5, 16.5, 16.5], [18, 18, 18]]
+coeff.t = np.array(coeff.t)
+coeff.T = [[2.5, 2.5, 2.5], [2.5, 2.5, 2.5], [2, 2, 2], [1, 1, 1], [2, 2, 2], [5, 5, 5], [1.5, 1.5, 1.5], [1.5, 1.5, 1.5]]
+coeff.T = np.array(coeff.T)
+
+coeff.get_omega()
