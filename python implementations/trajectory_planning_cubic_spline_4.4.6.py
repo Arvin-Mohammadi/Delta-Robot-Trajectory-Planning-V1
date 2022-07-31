@@ -1,10 +1,4 @@
-# in this file i attempt making a trajectory generator which makes the Delta robot go around a circle 
-# the boundary conditions are as followed: (we have n-1 points in the trajectory and then we add another 2 ponits)
-# 1. continuity on the position 		 --> 2n-2 	conditions
-# 2. continuity on the velocity 		 --> n-2 	conditions 
-# 3. continuity on the acceleration 	 --> n-2 	conditions 
-# 4. initial and final velocity zero 	 --> 2 		conditions
-# 5. initial and final acceleration zero --> 2 		conditions
+# this is not really useful cause it doesn't give out "nice" data
 
 # =================================================================================================
 # -- IMPORTS --------------------------------------------------------------------------------------
