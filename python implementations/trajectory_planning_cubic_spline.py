@@ -23,35 +23,6 @@ print(time.time() - t)
 
 
 # =================================================================================================
-# -- FORWARD KINEMATICS ---------------------------------------------------------------------------
-# =================================================================================================
-			# NOT COMPLETE
-# here we have the angles of the joints (theta1, theta2, theta3)
-# our goal is to find the position of the end effector (EE center position)
-
-class ForwardKinematics:
-
-	def __init__ (self, theta, active_rod=0.2, passive_rod=0.46, base_radius=0.3464101615, EE_radius=0.2563435195, alpha=[0, 120, 240]):
-		# constants 
-		e = EE_radius
-		f = base_radius
-		re = passive_rod
-		rf = active_rod
-
-		sqrt3 = 3**0.5
-		pi = math.pi
-		sin120 = math.sin(120 * pi /180)
-		cos120 = -0.5 
-		tan60 = sqrt3
-		sin30 = 0.5
-		tan30 = 1/sqrt3
-
-		self.theta = theta # theta1 theta2 theta3 matrix is of shape (n, 3)
-		self.n = self.theta.shape[0]
-
-
-
-# =================================================================================================
 # -- INVERSE KINEMATICS ---------------------------------------------------------------------------
 # =================================================================================================
 

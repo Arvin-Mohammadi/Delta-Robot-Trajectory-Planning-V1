@@ -197,9 +197,9 @@ class InverseKinematics:
 
 class PositionGenerator:
 
-	def __init__(self, ratio, center, t=0.1):
+	def __init__(self, ratio, center, t=6):
 		# t is in seconds
-		n = t*1000
+		n = 500
 		pi = math.pi
 		self.n = int(n)
 		self.ratio = ratio		# r
@@ -223,7 +223,7 @@ class PositionGenerator:
 
 class Coeff:
 
-	def __init__(self, points, intial_velo=[0, 0, 0], final_velo=[0, 0, 0], initial_acc=[0, 0, 0], final_acc=[0, 0, 0]):
+	def __init__(self, points, final_time, intial_velo=[0, 0, 0], final_velo=[0, 0, 0], initial_acc=[0, 0, 0], final_acc=[0, 0, 0]):
 
 		# initialzing the postion, velocity and acceleration vectors 
 		# all of the vectors are n*3 matrices (e.g: for v we have 3 components in x, y and z direction)
@@ -237,7 +237,7 @@ class Coeff:
 
 		# time value assignment, shape = n*3 it is measured in milisecond
 		for i in [0, 1, 2]:
-			self.t[:, i] = np.linspace(0, self.n, num=self.n+1)
+			self.t[:, i] = np.linspace(0, final_time, num=self.n+1)
 
 		# initializing q-bar matrix
 		self.q_bar = np.zeros((self.points.shape[0]+2, self.points.shape[1]))
@@ -358,26 +358,41 @@ class Polynomial:
 		self.poly_matrix[0, :] = self.coeff[0, :, 0]
 		self.poly_matrix[1:, :] = self.coeff[:, :, 0] + self.coeff[:, :, 1]*self.T + self.coeff[:, :, 2]*self.T**2 + self.coeff[:, :, 3]*self.T**3
 		
-		print("\n this is polynomial matrix\n\n", self.poly_matrix, "\n", type(self.poly_matrix), "\n", self.poly_matrix.shape)
+		print("\n this is polynomial theta matrix\n\n", self.poly_matrix, "\n", type(self.poly_matrix), "\n", self.poly_matrix.shape)
 	
 	def get_velo(self):
-		velocity = np.zeros((self.n+1, 3))
+		self.velocity = np.zeros((self.n+1, 3))
+		self.velocity[0, :] = self.coeff[0, :, 1]
+		self.velocity[1:, :] = self.coeff[:, :, 1] + 2*self.coeff[:, :, 2]*self.T + 3*self.coeff[:, :, 3]*self.T**2
+		
+		
+		print("\n this is polynomial angular velocity matrix\n\n", self.velocity, "\n", type(self.velocity), "\n", self.velocity.shape)
+		print("maximum point is: ", np.argmax(self.velocity))
+
+		return self.velocity 
 
 	def get_acc(self):
-		acceleration = np.zeros((self.n+1, 3))
+		self.acceleration = np.zeros((self.n+1, 3))
+		self.velocity[0, :] = 2*self.coeff[0, :, 2]
+		self.acceleration[1:, :] = 2*self.coeff[:, :, 2] + 6*self.coeff[:, :, 3]*self.T
+
+		print("\n this is polynomial angular acceleration matrix\n\n", self.acceleration, "\n", type(self.acceleration), "\n", self.acceleration.shape)
+
+		return self.acceleration
+
 
 # =================================================================================================
 # -- MAIN -----------------------------------------------------------------------------------------
 # =================================================================================================
 
-print("\n ============================= START ============================= \n")
+# print("\n ============================= START ============================= \n")
 
-generator = PositionGenerator(0.3, [0, 0, -0.38], t=0.1)
+generator = PositionGenerator(0.3, [0, 0, -0.38], t=6)
 cart_position = generator.cart_position()
 
-print("this is our cartesian positions \n\n", cart_position, "\n", type(cart_position), "\n", cart_position.shape, "\n")
+#print("this is our cartesian positions \n\n", cart_position, "\n", type(cart_position), "\n", cart_position.shape, "\n")
 
-print("\n ============================= INVERSE ============================= \n")
+#print("\n ============================= INVERSE ============================= \n")
 
 n = cart_position.shape[0] # number of points in the cartesian position
 THETA = np.zeros((n, 3)) # theta initialization for n points in 3 directions (theta1, theta2, theta3)
@@ -387,20 +402,20 @@ for i in range(n):
 	theta = inverse.get_theta()
 	THETA[i, :] = theta
 
-print("this is THETA\n\n", THETA, "\n", type(THETA), "\n", THETA.shape)
+#print("this is THETA\n\n", THETA, "\n", type(THETA), "\n", THETA.shape)
 
-print("\n ============================= POLY COEFF ============================= \n")
+#print("\n ============================= POLY COEFF ============================= \n")
 
-coeff = Coeff(THETA)
+coeff = Coeff(THETA, 6)
 coeff.get_t_bar()
 coeff.get_T()
 coeff.get_omega()
 coeff.get_q_bar()
 coeff_matrix = coeff.get_coeff_matrix()
-
+t = coeff.t
 T = coeff.T
 
-print("\n this is polynomial coefficients matrix\n\n", coeff_matrix, "\n", type(coeff_matrix), "\n", coeff_matrix.shape)
+# print("\n this is polynomial coefficients matrix\n\n", coeff_matrix, "\n", type(coeff_matrix), "\n", coeff_matrix.shape)
 
 print("\n ============================= POLY DESCRETE POINTS ============================= \n")
 
@@ -411,7 +426,7 @@ ACCELERATION = polynomial.get_acc()
 print("time is:")
 print(time.time() - t)
 
-print("\n ============================= FORWARD KINEMATICS ============================= \n")
+# print("\n ============================= FORWARD KINEMATICS ============================= \n")
 
 POSITION = np.zeros((n, 3)) # theta initialization for n points in 3 directions (theta1, theta2, theta3)
 for i in range(n):
@@ -419,20 +434,32 @@ for i in range(n):
 	position = forward.get_position()
 	POSITION[i, :] = position
 
-print("\n this is cartesian position using forward kinetmatics\n\n", POSITION, "\n", type(POSITION), "\n", POSITION.shape)
 
-# plt.title("position in x-y plane ", fontsize='16')
-# plt.plot(POSITION[:, 0], POSITION[:, 1])
-# plt.xlabel("X", fontsize='13')
-# plt.ylabel("Y", fontsize='13')
-# plt.legend(('POSITION'), loc='best')
-# plt.grid()
-# plt.show()
+print("this is t\n", t, "\n", t.shape)
+# print("\n this is cartesian position using forward kinetmatics\n\n", POSITION, "\n", type(POSITION), "\n", POSITION.shape)
 
+plt.title("position in x-y plane ", fontsize='16')
+plt.plot(POSITION[:, 0], POSITION[:, 1])
+plt.xlabel("X", fontsize='13')
+plt.ylabel("Y", fontsize='13')
+plt.legend(('POSITION'), loc='best')
+plt.grid()
+plt.show()
 
-# plt.title("velocity in x, y and z directions", fontsize='16')
-# plt.plot(VELOCITY[:, 0], VELOCITY[:, 1], VELOCITY[:, 2])
-# plt.xlabel("t")
-# plt.ylabel("velocity")
-# plt.grid()
-# plt.show()
+plt.title("velocity in x, y and z directions", fontsize='16')
+plt.plot(t, VELOCITY[:, 0]/6)
+plt.plot(t, VELOCITY[:, 1]/6)
+plt.plot(t, VELOCITY[:, 2]/6)
+plt.xlabel("t")
+plt.ylabel("velocity")
+plt.grid()
+plt.show()
+
+plt.title("acceleration in x, y and z directions", fontsize='16')
+plt.plot(t, ACCELERATION[:, 0])
+plt.plot(t, ACCELERATION[:, 1])
+plt.plot(t, ACCELERATION[:, 2])
+plt.xlabel("t")
+plt.ylabel("acceleration")
+plt.grid()
+plt.show()
