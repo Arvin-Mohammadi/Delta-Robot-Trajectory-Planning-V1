@@ -187,3 +187,291 @@ class InverseKinematics:
 		self.theta = ((np.array(self.theta)*180/math.pi) + 47.2)*50
 
 		return self.theta
+
+# =================================================================================================
+# -- POSITION GENERATOR ---------------------------------------------------------------------------
+# =================================================================================================
+
+# in this part we try to generate a circle and get n sample points from that circle. 
+# this results in having n-1 cartesian points (matrix.shape=(n-1, 3))
+
+class PositionGenerator:
+
+	def __init__(self, ratio, center, t=6):
+		# t is in seconds
+		n = 500
+		pi = math.pi
+		self.n = int(n)
+		self.ratio = ratio		# r
+		self.center = center	# xc, yc, zc
+		self.gamma = np.linspace(0, 2*pi, num=self.n+1)
+
+	def cart_position(self):
+		# self.points is the positions of the n points in x, y and z directions (n*3 matrix)
+		self.points = np.array([np.cos(self.gamma)*self.ratio + np.ones((self.n+1))*self.center[0], np.sin(self.gamma)*self.ratio + np.ones((self.n+1))*self.center[1], np.ones((self.n+1))*self.center[2]])
+		self.points = np.transpose(self.points)
+		return self.points
+
+# =================================================================================================
+# -- POLYNOMIAL COEFFICIENT MATRIX ----------------------------------------------------------------
+# =================================================================================================
+
+# Give data: n-1 points
+
+# first step: making the n-1 points into n+1 points (adding q_1 and q_(n-1))
+# second step: 
+
+class Coeff:
+
+	def __init__(self, points, final_time, intial_velo=[0, 0, 0], final_velo=[0, 0, 0], initial_acc=[0, 0, 0], final_acc=[0, 0, 0]):
+
+		# initialzing the postion, velocity and acceleration vectors 
+		# all of the vectors are n*3 matrices (e.g: for v we have 3 components in x, y and z direction)
+		self.points = np.array(points)
+		self.t = np.zeros(self.points.shape)
+		self.n = self.points.shape[0] - 1
+		self.vi = np.array(intial_velo)
+		self.vf = np.array(final_velo)
+		self.ai = np.array(initial_acc)
+		self.af = np.array(final_acc)
+
+		# time value assignment, shape = n*3 it is measured in milisecond
+		for i in [0, 1, 2]:
+			d = np.zeros((self.n))
+			for j in range(self.n):
+				d[j] = abs(self.points[j+1, i] - self.points[j, i])**0.5
+			d_sum = np.sum(d)
+
+			print("\nthis is d\n\n", d, "\n ", d.shape)
+			print("\nthis is sum of d", d_sum)
+			self.t[0, :] = 0
+			for j in range(1, self.n+1):
+				self.t[j, i] = self.t[j-1, i] + d[j-1]/d_sum
+		self.t = self.t*final_time 
+	
+		print("\nthis is time\n\n", self.t, "\n", self.t.shape)
+		# initializing q-bar matrix
+		self.q_bar = np.zeros((self.points.shape[0]+2, self.points.shape[1]))
+		# assigning values to q-bar matrix without assigning q_1 and q_n_minut_1
+		self.q_bar[0, :] = self.points[0, :]
+		self.q_bar[2:self.n-1, :] = self.points[1:self.n-2]
+		self.q_bar[self.n, :] = self.points[self.n-2, :]
+		
+	def get_t_bar(self):
+		# initializing t-bar matrix  
+		self.t_bar = np.zeros((self.t.shape[0]+2, self.t.shape[1]))
+		# assigning values to t-bar matrix
+		self.t_bar[0, :] = self.t[0, :]
+		self.t_bar[2:self.n-1, :] = self.t[1:self.n-2]
+		self.t_bar[self.n, :] = self.t[self.n-2, :]
+		t_1 = (self.t[0, :] + self.t[1, :])/2
+		t_n_minus_1 = (self.t[self.n-3, :] + self.t[self.n-2, :])/2
+		self.t_bar[[1, self.n-1], :] = [t_1, t_n_minus_1]
+	
+	def get_T(self):
+		# intializing the T matrix (time intervals)
+		self.T = np.zeros((self.n, 3))
+		# assigning values to T matrix 
+		self.T = self.t_bar[1:self.n+1, :] - self.t_bar[0:self.n, :] # changed
+	
+	def get_omega(self):
+		
+		vi = self.vi
+		vf = self.vf
+		ai = self.ai
+		af = self.af
+		n = self.n
+
+		# initializing the c matrix 
+		c = np.zeros((self.n-1, 3))
+		# assigning the values to the c matrix t
+		c[0, :] = (self.q_bar[2] - self.q_bar[0])/self.T[1] - vi*(1 + self.T[0]/self.T[1]) - ai*(0.5 + self.T[0]/(3*self.T[1]))*self.T[0]
+		c[1, :] = (self.q_bar[3] - self.q_bar[2])/self.T[2] - (self.q_bar[2] - self.q_bar[0])/self.T[1] + vi*self.T[0]/self.T[1] + ai*self.T[0]**2/(3*self.T[1])
+		c[2:n-3, :] = (self.q_bar[4:n-1] - self.q_bar[3:n-2])/self.T[3:n-2] - (self.q_bar[3:n-2] - self.q_bar[2:n-3])/self.T[2:n-3]
+		c[n-3, :] = (self.q_bar[n] - self.q_bar[n-2])/self.T[n-2] - (self.q_bar[n-2] - self.q_bar[n-3])/self.T[n-3] - vf*self.T[n-1]/self.T[n-2] + af*self.T[n-1]**2/(3*self.T[n-2])
+		c[n-2, :] =(self.q_bar[n-2] - self.q_bar[n])/self.T[n-2] + vf*(1 + self.T[n-1]/self.T[n-2]) - af*(0.5 + self.T[n-1]/(3*self.T[n-2])*self.T[n-1])
+		c = c*6
+
+		# initializing the A matrix 
+		A = np.zeros((3, self.n-1,self.n-1))
+		# assigning the values to the A matrix 
+		for i in range(1, A.shape[1]-1): # changed
+			A[:, i-1, i] = self.T[i]
+			A[:, i, i] = 2*(self.T[i] + self.T[i+1])
+			A[:, i+1, i] = self.T[i+1]
+		
+		
+		A[:, 0, 0] = 2*self.T[1] + self.T[0]*(3 + self.T[0]/self.T[1])
+		A[:, 1, 0] = self.T[1] - self.T[0]**2/self.T[1]
+		A[:, n-3, n-2] = self.T[n-2] - self.T[n-1]**2/self.T[n-2]
+		A[:, n-2, n-2] = 2*self.T[n-2] + self.T[n-1]*(3 + self.T[n-1]/self.T[n-2])
+
+		
+		# initializing omega matrix 
+		self.omega = np.zeros((self.n-1, 3))
+		for i in [0, 1, 2]:
+			M = np.linalg.inv(A[i, :, :])
+			N = c[:, i]
+			self.omega[:, i] = np.matmul(M, N)
+
+	def get_q_bar(self):
+		
+		vi = self.vi
+		vf = self.vf
+		ai = self.ai
+		af = self.af
+		n = self.n
+		# updating the q bar index 1 an (n-1) with the help of omega matrix 
+		self.q_bar[1, :] = self.q_bar[0] + self.T[0]*vi + self.T[0]**2/3*ai + self.T[0]**2/6*self.omega[0]
+		self.q_bar[n-1, :] = self.q_bar[n] - self.T[n-1]*vf + self.T[n-1]**2/3*af + self.T[n-1]**2/6*self.omega[n-2]
+
+	def get_coeff_matrix(self):
+		# initializing the coefficient matrix 
+		# dim 1 == number of polynomials 				--> k = 0, ..., n-1
+		# dim 2 == number of x, y, z directions 		--> 3
+		# dim 3 == number of coeff in the polynomial 	--> (e.g: a[k][0][m] that m=0,1,2,3 is for the k_th point in x direction)
+		self.coeff = np.zeros((self.n, 3, 4)) 
+		
+		# omega matrix has n-1 rows but it needs n+1 so we re-assign the omega to a n+1*3 matrix putting the index 0 and n to zero
+		
+		temp_omega = self.omega
+		self.omega = np.zeros((self.n+1, 3))
+		self.omega[0, :] = 0
+		self.omega[self.n, :] = 0
+		self.omega[1:self.n, :] = temp_omega
+
+		# assigning the values of wrt position and velocity
+		self.coeff[:, :, 0] = self.q_bar[0:self.n, :]
+		self.coeff[:, :, 1] = (self.q_bar[1:self.n+1, :] - self.q_bar[0:self.n, :])/self.T[0:self.n, :] - self.T[0:self.n, :]/6*(self.omega[1:self.n+1, :] + 2*self.omega[0:self.n, :])
+		self.coeff[:, :, 2] = self.omega[0:self.n, :]/2
+		self.coeff[:, :, 3] = (self.omega[1:self.n+1, :] - self.omega[0:self.n, :])/(6*self.T[0:self.n, :])
+		
+		return self.coeff
+
+# =================================================================================================
+# -- POLYNOMIALS ----------------------------------------------------------------------------------
+# =================================================================================================
+
+# here we want to get the coefficient matrix and then build the polynomials accordingly.
+# after that we calculate a number of discrete points with this method of interpolation.
+
+class Polynomial:
+
+	def __init__(self, coeff_matrix, T):
+		
+		self.coeff = coeff_matrix
+		self.T = T
+		self.n = self.coeff.shape[0]
+		
+		# initializing the polynomial matrix
+		self.poly_matrix = np.zeros((self.n+1, 3))
+
+		self.poly_matrix[0, :] = self.coeff[0, :, 0]
+		self.poly_matrix[1:, :] = self.coeff[:, :, 0] + self.coeff[:, :, 1]*self.T + self.coeff[:, :, 2]*self.T**2 + self.coeff[:, :, 3]*self.T**3
+		
+		print("\n this is polynomial theta matrix\n\n", self.poly_matrix, "\n", type(self.poly_matrix), "\n", self.poly_matrix.shape)
+	
+	def get_velo(self):
+		self.velocity = np.zeros((self.n+1, 3))
+		self.velocity[0, :] = self.coeff[0, :, 1]
+		self.velocity[1:, :] = self.coeff[:, :, 1] + 2*self.coeff[:, :, 2]*self.T + 3*self.coeff[:, :, 3]*self.T**2
+		
+		
+		print("\n this is polynomial angular velocity matrix\n\n", self.velocity, "\n", type(self.velocity), "\n", self.velocity.shape)
+		print("maximum point is: ", np.argmax(self.velocity))
+
+		return self.velocity 
+
+	def get_acc(self):
+		self.acceleration = np.zeros((self.n+1, 3))
+		self.velocity[0, :] = 2*self.coeff[0, :, 2]
+		self.acceleration[1:, :] = 2*self.coeff[:, :, 2] + 6*self.coeff[:, :, 3]*self.T
+
+		print("\n this is polynomial angular acceleration matrix\n\n", self.acceleration, "\n", type(self.acceleration), "\n", self.acceleration.shape)
+
+		return self.acceleration
+
+
+# =================================================================================================
+# -- MAIN -----------------------------------------------------------------------------------------
+# =================================================================================================
+
+# print("\n ============================= START ============================= \n")
+
+generator = PositionGenerator(0.3, [0, 0, -0.38], t=6)
+cart_position = generator.cart_position()
+
+#print("this is our cartesian positions \n\n", cart_position, "\n", type(cart_position), "\n", cart_position.shape, "\n")
+
+#print("\n ============================= INVERSE ============================= \n")
+
+n = cart_position.shape[0] # number of points in the cartesian position
+THETA = np.zeros((n, 3)) # theta initialization for n points in 3 directions (theta1, theta2, theta3)
+for i in range(n):
+	inverse = InverseKinematics(cart_position[i])
+	inverse.get_J1_positions()
+	theta = inverse.get_theta()
+	THETA[i, :] = theta
+
+#print("this is THETA\n\n", THETA, "\n", type(THETA), "\n", THETA.shape)
+
+#print("\n ============================= POLY COEFF ============================= \n")
+
+coeff = Coeff(THETA, 6)
+coeff.get_t_bar()
+coeff.get_T()
+coeff.get_omega()
+coeff.get_q_bar()
+coeff_matrix = coeff.get_coeff_matrix()
+t = coeff.t
+T = coeff.T
+
+# print("\n this is polynomial coefficients matrix\n\n", coeff_matrix, "\n", type(coeff_matrix), "\n", coeff_matrix.shape)
+
+print("\n ============================= POLY DESCRETE POINTS ============================= \n")
+
+polynomial = Polynomial(coeff_matrix, T)
+VELOCITY = polynomial.get_velo()
+ACCELERATION = polynomial.get_acc()
+
+print("time is:")
+print(time.time() - t)
+
+# print("\n ============================= FORWARD KINEMATICS ============================= \n")
+
+POSITION = np.zeros((n, 3)) # theta initialization for n points in 3 directions (theta1, theta2, theta3)
+for i in range(n):
+	forward = ForwardKinematics(THETA[i])
+	position = forward.get_position()
+	POSITION[i, :] = position
+
+
+print("this is t\n", t, "\n", t.shape)
+# print("\n this is cartesian position using forward kinetmatics\n\n", POSITION, "\n", type(POSITION), "\n", POSITION.shape)
+
+plt.title("position in x-y plane ", fontsize='16')
+plt.plot(POSITION[:, 0], POSITION[:, 1])
+plt.xlabel("X", fontsize='13')
+plt.ylabel("Y", fontsize='13')
+plt.legend(('POSITION'), loc='best')
+plt.grid()
+plt.show()
+
+plt.title("velocity in x, y and z directions", fontsize='16')
+plt.plot(t[:, 0], VELOCITY[:, 0]/6, label="this one ")
+plt.plot(t[:, 0], VELOCITY[:, 1]/6, label="not this ")
+plt.plot(t[:, 0], VELOCITY[:, 2]/6, label="not this")
+plt.legend()
+plt.xlabel("t")
+plt.ylabel("velocity")
+plt.grid()
+plt.show()
+
+plt.title("acceleration in x, y and z directions", fontsize='16')
+plt.plot(t[:, 0], ACCELERATION[:, 0]/6)
+plt.plot(t[:, 1], ACCELERATION[:, 1]/6)
+plt.plot(t[:, 2], ACCELERATION[:, 2]/6)
+plt.xlabel("t")
+plt.ylabel("acceleration")
+plt.grid()
+plt.show()
