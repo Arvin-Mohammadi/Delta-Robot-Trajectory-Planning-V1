@@ -12,9 +12,6 @@ here's a [good playlist](https://www.youtube.com/playlist?list=PLjx2FAhpTe3FGbcj
 [also this pdf explains the theory and implementation pretty easily](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/theory/Inverse%20Kinematics%20(Delta%20Robot).pdf)
 
 
-
-also there is what i used: "theory\Inverse Kinematics (Delta Robot).pdf"
-
    3. 3-4-5 polynomial and 4-5-6-7 polynomial point to point movement, you can learn about this in the book "Fundamentals of Robotic 
        Mechanical Systems, theory, methods, and Algorithms, Fourth Edition by Jorge Angeles - chapter 6"
 
