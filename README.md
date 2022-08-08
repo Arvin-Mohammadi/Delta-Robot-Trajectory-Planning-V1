@@ -3,20 +3,17 @@
 this will be a step by step demonstration of how to control trajectory of a Delta robot End-Effector
 check out my [telegram channel](https://t.me/engineering_stuff_69)
 
-# 
+# 1. ROBOTICS (INVERSE AND FORWARD KINEAMTICS)
+
+here's a [good playlist](https://www.youtube.com/playlist?list=PLjx2FAhpTe3FGbcjBbxlhf56qVR0XbVNO) for learning FK and IK <br />
+<br />
+[here's how you would compute Delta Robot IK](https://sites.google.com/site/deltarobotberkeley/how-it-works) <br />
+<br />
+[also this pdf explains the theory and implementation pretty easily](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/theory/Inverse%20Kinematics%20(Delta%20Robot).pdf)
 
 
-# step 1: THEORY
 
-   1. first you'll need to know a bit of robotics(meaning what forward and inverse kinematics are)
-      for that you can use this youtube play list:
-      https://www.youtube.com/playlist?list=PLjx2FAhpTe3FGbcjBbxlhf56qVR0XbVNO
- 
-   2. after you get to know how FK and IK work, you should be able to derive these for the Delta pick-n-place robot, for IK you can 
-      check this link out:
-      https://sites.google.com/site/deltarobotberkeley/how-it-works
-
-      also there is what i used: "theory\Inverse Kinematics (Delta Robot).pdf"
+also there is what i used: "theory\Inverse Kinematics (Delta Robot).pdf"
 
    3. 3-4-5 polynomial and 4-5-6-7 polynomial point to point movement, you can learn about this in the book "Fundamentals of Robotic 
        Mechanical Systems, theory, methods, and Algorithms, Fourth Edition by Jorge Angeles - chapter 6"
