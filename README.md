@@ -5,11 +5,25 @@ check out my [telegram channel](https://t.me/engineering_stuff_69)
 
 # 1. ROBOTICS (INVERSE AND FORWARD KINEAMTICS)
 
+with trajectory planning there are two fundemental questions we need an answer for:
+1. given a specific location in the real world, what values should my robot's joint be set to in order to get the End-Effector there? (inverse kinematics)
+2. given the setting of my joints, where is my EE in real world coordinates? (forward kinematics)
+
 here's a [good playlist](https://www.youtube.com/playlist?list=PLjx2FAhpTe3FGbcjBbxlhf56qVR0XbVNO) for learning FK and IK <br />
 <br />
 [here's how you would compute Delta Robot IK](https://sites.google.com/site/deltarobotberkeley/how-it-works) <br />
 <br />
-[also this pdf explains the theory and implementation pretty easily](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/theory/Inverse%20Kinematics%20(Delta%20Robot).pdf)
+[also this pdf explains the theory and implementation pretty easily](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/theory/Inverse%20Kinematics%20(Delta%20Robot).pdf) <br />
+<br />
+
+
+
+hey 
+
+
+
+
+
 
 
    3. 3-4-5 polynomial and 4-5-6-7 polynomial point to point movement, you can learn about this in the book "Fundamentals of Robotic 
