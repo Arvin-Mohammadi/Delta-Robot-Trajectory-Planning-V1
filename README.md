@@ -3,12 +3,12 @@
 this will be a step by step demonstration of how to control trajectory of a Delta robot End-Effector
 check out my [telegram channel](https://t.me/engineering_stuff_69)
 
-### My Great Heading {#custom-id} 
+### My Great Heading {#1} 
 
 
 
 
-hey what the fuck 
+
 
 
 
