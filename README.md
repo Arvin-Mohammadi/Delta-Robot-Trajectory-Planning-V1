@@ -1,5 +1,7 @@
 # Delta_Robot
 
+![delta robot](https://www.linearmotiontips.com/wp-content/uploads/2016/01/Delta-Robot-Diagram.jpg)
+
 this will be a step by step demonstration of how to control trajectory of a Delta robot End-Effector
 check out my [telegram channel](https://t.me/engineering_stuff_69)
 
