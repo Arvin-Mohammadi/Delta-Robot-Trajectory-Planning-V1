@@ -51,4 +51,11 @@ cubic spline (book Trajectory Planning for Automatix Machines and Robots by Luig
 - CIRCLE MOVEMENT:
   cubic spline with assigned initial and final velocities and acceleration --> [trajectory_planing_cubic_spline_4.4.4.py](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/python%20implementations/trajectory_planning_cubic_spline_4.4.4.py)
 
+# 3. TRAJECTORY PLANNING (TRYING OTHER ALGORITHMS) 
+
+## 1) Jacobian 
+### theory
+i got the theory and algorithm from [this article](http://jai.front-sci.com/index.php/jai/article/view/505)
+
+### python implementation
 
