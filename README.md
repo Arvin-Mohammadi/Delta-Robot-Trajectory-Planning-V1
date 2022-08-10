@@ -55,7 +55,7 @@ cubic spline (book Trajectory Planning for Automatix Machines and Robots by Luig
 
 ## 1) Jacobian 
 ### theory
-i got the theory and algorithm from [this article](http://jai.front-sci.com/index.php/jai/article/view/505)
+i got the theory and algorithm from [this article]([http://jai.front-sci.com/index.php/jai/article/view/505](http://jai.front-sci.com/index.php/jai/article/download/505/591))
 
 ### python implementation
 
