@@ -19,7 +19,7 @@ with trajectory planning there are two fundemental questions we need an answer f
    <br />
 
 ### python implementation
-you can see my python implementation of IK in the file [trajectory_planning_345.py](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/python%20implementations/trajectory_planning_345.py)
+you can see my python implementation of IK in the file [trajectory_planning_345.py](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/point%20to%20point%20movement%20(python)/trajectory_planning_345.py)
 
 # 2. POINT TO POINT MOVEMENT
 this section is dedicated to answer how should you go about writing a code for point to point movement (moving the EE from point 1 to point 2 in 3d space )
@@ -30,10 +30,10 @@ Mechanical Systems, theory, methods, and Algorithms, Fourth Edition by Jorge Ang
 
 ### python implementation
 - POINT TO POINT MOVEMENT (3-4-5 polynomial):
-  moveing from point to point in the direction desired --> [trajectory_planning_345.py](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/python%20implementations/trajectory_planning_345.py)
+  moveing from point to point in the direction desired --> [trajectory_planning_345.py](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/point%20to%20point%20movement%20(python)/trajectory_planning_345.py)
 
 - POINT TO POINT MOVEMENT (4-5-6-7 polynomial):
-  we repeat what we've done for sub-step 2 but with a 7th order polynomial --> [trajectory_planning_4567.py](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/python%20implementations/trajectory_planning_4567.py)
+  we repeat what we've done for sub-step 2 but with a 7th order polynomial --> [trajectory_planning_4567.py](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/point%20to%20point%20movement%20(python)/trajectory_planning_4567.py)
 
 # 3. TRAJECTORY PLANNING (CUBIC SPLINE AND SIMILAR ALGORITHMS)
 this section is dedicated to planning out a specific trajectory for the robot to go through
@@ -46,10 +46,10 @@ cubic spline (book Trajectory Planning for Automatix Machines and Robots by Luig
 
 ### python implementation
 - CIRCLE MOVEMENT:
-  cubic spline with assigned initial and final velocities --> [trajectory_planing_cubic_spline.py](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/python%20implementations/trajectory_planning_cubic_spline.py)
+  cubic spline with assigned initial and final velocities --> [trajectory_planing_cubic_spline.py](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/trajectory%20planning%20-%20cubic%20splin%20(python)/trajectory_planning_cubic_spline.py)
 
 - CIRCLE MOVEMENT:
-  cubic spline with assigned initial and final velocities and acceleration --> [trajectory_planing_cubic_spline_4.4.4.py](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/python%20implementations/trajectory_planning_cubic_spline_4.4.4.py)
+  cubic spline with assigned initial and final velocities and acceleration --> [trajectory_planing_cubic_spline_4.4.4.py](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/trajectory%20planning%20-%20cubic%20splin%20(python)/trajectory_planning_cubic_spline_4.4.4.py)
 
 # 3. TRAJECTORY PLANNING (TRYING OTHER ALGORITHMS) 
 
