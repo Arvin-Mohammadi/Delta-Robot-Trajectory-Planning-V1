@@ -56,6 +56,9 @@ cubic spline (book Trajectory Planning for Automatix Machines and Robots by Luig
 ## 1) Jacobian 
 
 ### theory
+1. [what is Jacobian matrix and how it is calculated](https://www.sciencedirect.com/science/article/pii/S1877050918309876)
+2. [how jacobian matrix is used in delta robot trajectory palanning](http://jai.front-sci.com/index.php/jai/article/view/505)
+3. [detailed calculation and analysis of Jacobian matrix in delta robot](http://jai.front-sci.com/index.php/jai/article/view/505)
 
 ### python implementation
 
