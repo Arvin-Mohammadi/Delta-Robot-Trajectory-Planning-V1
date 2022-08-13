@@ -35,7 +35,7 @@ Mechanical Systems, theory, methods, and Algorithms, Fourth Edition by Jorge Ang
 - POINT TO POINT MOVEMENT (4-5-6-7 polynomial):
   we repeat what we've done for sub-step 2 but with a 7th order polynomial --> [trajectory_planning_4567.py](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/python%20implementations/trajectory_planning_4567.py)
 
-# 3. TRAJECTORY PLANNING
+# 3. TRAJECTORY PLANNING (CUBIC SPLINE AND SIMILAR ALGORITHMS)
 this section is dedicated to planning out a specific trajectory for the robot to go through
 
 ### theory
@@ -54,8 +54,8 @@ cubic spline (book Trajectory Planning for Automatix Machines and Robots by Luig
 # 3. TRAJECTORY PLANNING (TRYING OTHER ALGORITHMS) 
 
 ## 1) Jacobian 
+
 ### theory
-i got the theory and algorithm from [this article](http://jai.front-sci.com/index.php/jai/article/download/505/591)
 
 ### python implementation
 
