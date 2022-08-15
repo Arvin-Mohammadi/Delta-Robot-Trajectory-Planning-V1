@@ -184,7 +184,7 @@ class InverseKinematics:
 			self.theta[i] = (math.atan(-z_J1/(y_F1 - y_J1)))
 
 		# Gearbox ratio = 50, zero offset = 47.2 degree
-		self.theta = ((np.array(self.theta)*180/math.pi) + 47.2)*50
+		# self.theta = ((np.array(self.theta)*180/math.pi) + 47.2)*50
 
 		return self.theta
 
@@ -465,3 +465,11 @@ plt.xlabel("t")
 plt.ylabel("acceleration")
 plt.grid()
 plt.show()
+
+# # =================================================================================================
+# # -- TEST -----------------------------------------------------------------------------------------
+# # =================================================================================================
+
+# inverse = InverseKinematics([0.0, 0.0, -0.38])
+# inverse.get_J1_positions()
+# print(inverse.get_theta()*180/math.pi)
