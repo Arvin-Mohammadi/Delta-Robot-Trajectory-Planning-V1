@@ -11,12 +11,17 @@ with trajectory planning there are two fundemental questions we need an answer f
 2. given the setting of my joints, where is my EE in real world coordinates? (forward kinematics)
 
 ### theory
-   here's a [good playlist](https://www.youtube.com/playlist?list=PLjx2FAhpTe3FGbcjBbxlhf56qVR0XbVNO) for learning FK and IK <br />
-   <br />
-   [here's how you would compute Delta Robot IK](https://sites.google.com/site/deltarobotberkeley/how-it-works) <br />
-   <br />
-   [also this pdf explains the theory and implementation pretty easily](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/theory/Inverse%20Kinematics%20(Delta%20Robot).pdf) <br />
-   <br />
+![delta robot kinemtaics figure 1](https://i.ibb.co/cc29GYf/Delta-robot-kin.png)
+![delta robot kinemtaics figure 2](https://i.ibb.co/VVVQfkF/Delta-robot-kin-2.png)
+
+The Delta robot is a 3-DOF robot that consists of two parallel platforms. One of them, which we call the EE platform, is capable of moving and the other one, which we call base platform, is not capable of that. These two platforms are connected with three arms. Each arm has one pin and two universal joints (as shown in the figure) that connect two solid rods. The rod which is connected to base platform by the pin, is called the active rod, and the other one is called the passive rod. The center of the base and EE platforms are marked as $O$ and $O'$ respectively.  The pin is denoted as A, the universal joint connecting the passive and active rods, is denoted as B. The universal joint connecting the EE platform and the passive rod is denoted as C. 
+
+here's a [good playlist](https://www.youtube.com/playlist?list=PLjx2FAhpTe3FGbcjBbxlhf56qVR0XbVNO) for learning FK and IK <br />
+<br />
+[here's how you would compute Delta Robot IK](https://sites.google.com/site/deltarobotberkeley/how-it-works) <br />
+<br />
+[also this pdf explains the theory and implementation pretty easily](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/theory/Inverse%20Kinematics%20(Delta%20Robot).pdf) <br />
+<br />
 
 ### python implementation
 you can see my python implementation of IK in the file [trajectory_planning_345.py](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/point%20to%20point%20movement%20(python)/trajectory_planning_345.py)
