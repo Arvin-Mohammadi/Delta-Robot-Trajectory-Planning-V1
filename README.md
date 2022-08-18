@@ -1,4 +1,4 @@
-# Delta_Robot
+# DELTA PARALLEL ROBOT
 
 ![delta robot](https://www.linearmotiontips.com/wp-content/uploads/2016/01/Delta-Robot-Diagram.jpg)
 
@@ -10,23 +10,30 @@ with trajectory planning there are two fundemental questions we need an answer f
 1. given a specific location in the real world, what values should my robot's joint be set to in order to get the End-Effector there? (inverse kinematics)
 2. given the setting of my joints, where is my EE in real world coordinates? (forward kinematics)
 
-### theory
+### Theory
 ![delta robot kinemtaics figure 1](https://i.ibb.co/cc29GYf/Delta-robot-kin.png)
 ![delta robot kinemtaics figure 2](https://i.ibb.co/VVVQfkF/Delta-robot-kin-2.png)
 
 The Delta robot is a 3-DOF robot that consists of two parallel platforms. One of them, which we call the EE platform, is capable of moving and the other one, which we call base platform, is not capable of that. These two platforms are connected with three arms. Each arm has one pin and two universal joints (as shown in the figure) that connect two solid rods. The rod which is connected to base platform by the pin, is called the active rod, and the other one is called the passive rod. The center of the base and EE platforms are marked as $O$ and $O'$ respectively.  The pin is denoted as A, the universal joint connecting the passive and active rods, is denoted as B. The universal joint connecting the EE platform and the passive rod is denoted as C. 
 
-$(OO' ) ⃗+(O' C_i ) ⃗=(OA_i ) ⃗+(A_i  B_i ) ⃗+(B_i C_i ) ⃗$
+$\overrightarrow{(O O')} + \overrightarrow{(O' C_i)} = \overrightarrow{(O A_i)} + \overrightarrow{(A_i B_i)} + \overrightarrow{(B_i C_i)}$ (Equation 1)
 
-here's a [good playlist](https://www.youtube.com/playlist?list=PLjx2FAhpTe3FGbcjBbxlhf56qVR0XbVNO) for learning FK and IK <br />
-<br />
-[here's how you would compute Delta Robot IK](https://sites.google.com/site/deltarobotberkeley/how-it-works) <br />
-<br />
-[also this pdf explains the theory and implementation pretty easily](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/theory/Inverse%20Kinematics%20(Delta%20Robot).pdf) <br />
-<br />
+- IK: so you'll need to solve this equation and find $\theta_{ij}$ with respect to the other variables. this will solve the inverse kinematics problem. $\theta_{1j}$ are the angles of the actuator joints.
+- FK: for forward kinematics it, the equation number 1 is solved for $p_x, p_y, p_z$ (position of the EE) with respect to other variables (which is a much easier problem that IK) 
 
-### python implementation
-you can see my python implementation of IK in the file [trajectory_planning_345.py](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/point%20to%20point%20movement%20(python)/trajectory_planning_345.py)
+### References 
+- here's a [good playlist](https://www.youtube.com/playlist?list=PLjx2FAhpTe3FGbcjBbxlhf56qVR0XbVNO) for learning FK and IK
+
+- [Delta Robot Inverse Kinematics](https://sites.google.com/site/deltarobotberkeley/how-it-works)
+
+- [Delta Robot Inverse Kinematics method 1](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/theory/Inverse%20Kinematics%20(Delta%20Robot).pdf)
+
+- [Delta Robot Inverse Kinematics method 2](https://www.researchgate.net/publication/242073945_Delta_robot_Inverse_direct_and_intermediate_Jacobians)
+
+### Python implementation
+you can see my [python implementation of IK](https://github.com/ArthasMenethil-A/Delta_Robot/tree/main/inverse%20and%20forward%20kinematics):
+- [method 1](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/inverse%20and%20forward%20kinematics/IK_method_1.py)
+- [method 2](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/inverse%20and%20forward%20kinematics/IK_method_2.py)
 
 # 2. POINT TO POINT MOVEMENT
 this section is dedicated to answer how should you go about writing a code for point to point movement (moving the EE from point 1 to point 2 in 3d space )
