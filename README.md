@@ -21,6 +21,8 @@ $\overrightarrow{(O O')} + \overrightarrow{(O' C_i)} = \overrightarrow{(O A_i)} 
 - IK: so you'll need to solve this equation and find $\theta_{ij}$ with respect to the other variables. this will solve the inverse kinematics problem. $\theta_{1j}$ are the angles of the actuator joints.
 - FK: for forward kinematics it, the equation number 1 is solved for $p_x, p_y, p_z$ (position of the EE) with respect to other variables (which is a much easier problem that IK) 
 
+### references 
+
 here's a [good playlist](https://www.youtube.com/playlist?list=PLjx2FAhpTe3FGbcjBbxlhf56qVR0XbVNO) for learning FK and IK <br />
 <br />
 [here's how you would compute Delta Robot IK](https://sites.google.com/site/deltarobotberkeley/how-it-works) <br />
