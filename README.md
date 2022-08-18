@@ -22,12 +22,12 @@ $\overrightarrow{(O O')} + \overrightarrow{(O' C_i)} = \overrightarrow{(O A_i)} 
 - FK: for forward kinematics it, the equation number 1 is solved for $p_x, p_y, p_z$ (position of the EE) with respect to other variables (which is a much easier problem that IK) 
 
 ### References 
-- here's a [good playlist](https://www.youtube.com/playlist?list=PLjx2FAhpTe3FGbcjBbxlhf56qVR0XbVNO) for learning FK and IK <br />
-<br />
-- [Delta Robot Inverse Kinematics](https://sites.google.com/site/deltarobotberkeley/how-it-works) <br />
-<br />
-- [Delta Robot Inverse Kinematics method 1](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/theory/Inverse%20Kinematics%20(Delta%20Robot).pdf) <br />
-<br />
+- here's a [good playlist](https://www.youtube.com/playlist?list=PLjx2FAhpTe3FGbcjBbxlhf56qVR0XbVNO) for learning FK and IK
+
+- [Delta Robot Inverse Kinematics](https://sites.google.com/site/deltarobotberkeley/how-it-works)
+
+- [Delta Robot Inverse Kinematics method 1](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/theory/Inverse%20Kinematics%20(Delta%20Robot).pdf)
+
 - [Delta Robot Inverse Kinematics method 2](https://www.researchgate.net/publication/242073945_Delta_robot_Inverse_direct_and_intermediate_Jacobians)
 
 ### Python implementation
