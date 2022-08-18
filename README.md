@@ -1,4 +1,4 @@
-# Delta_Robot
+# DELTA PARALLEL ROBOT
 
 ![delta robot](https://www.linearmotiontips.com/wp-content/uploads/2016/01/Delta-Robot-Diagram.jpg)
 
@@ -31,7 +31,7 @@ $\overrightarrow{(O O')} + \overrightarrow{(O' C_i)} = \overrightarrow{(O A_i)} 
 - [Delta Robot Inverse Kinematics method 2](https://www.researchgate.net/publication/242073945_Delta_robot_Inverse_direct_and_intermediate_Jacobians)
 
 ### Python implementation
-you can see my python implementation of IK:
+you can see my [python implementation of IK](https://github.com/ArthasMenethil-A/Delta_Robot/tree/main/inverse%20and%20forward%20kinematics):
 - [method 1](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/inverse%20and%20forward%20kinematics/IK_method_1.py)
 - [method 2](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/inverse%20and%20forward%20kinematics/IK_method_2.py)
 
