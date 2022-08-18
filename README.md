@@ -16,7 +16,7 @@ with trajectory planning there are two fundemental questions we need an answer f
 
 The Delta robot is a 3-DOF robot that consists of two parallel platforms. One of them, which we call the EE platform, is capable of moving and the other one, which we call base platform, is not capable of that. These two platforms are connected with three arms. Each arm has one pin and two universal joints (as shown in the figure) that connect two solid rods. The rod which is connected to base platform by the pin, is called the active rod, and the other one is called the passive rod. The center of the base and EE platforms are marked as $O$ and $O'$ respectively.  The pin is denoted as A, the universal joint connecting the passive and active rods, is denoted as B. The universal joint connecting the EE platform and the passive rod is denoted as C. 
 
-$\vec(O O') +(O' C_i)=(O A_i) + (A_i B_i)(B_i C_i)$
+$\vec{(O O')} +(O' C_i)=(O A_i) + (A_i B_i)(B_i C_i)$
 
 here's a [good playlist](https://www.youtube.com/playlist?list=PLjx2FAhpTe3FGbcjBbxlhf56qVR0XbVNO) for learning FK and IK <br />
 <br />
