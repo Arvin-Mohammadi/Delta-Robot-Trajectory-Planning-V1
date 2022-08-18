@@ -10,7 +10,7 @@ with trajectory planning there are two fundemental questions we need an answer f
 1. given a specific location in the real world, what values should my robot's joint be set to in order to get the End-Effector there? (inverse kinematics)
 2. given the setting of my joints, where is my EE in real world coordinates? (forward kinematics)
 
-### theory
+### Theory
 ![delta robot kinemtaics figure 1](https://i.ibb.co/cc29GYf/Delta-robot-kin.png)
 ![delta robot kinemtaics figure 2](https://i.ibb.co/VVVQfkF/Delta-robot-kin-2.png)
 
@@ -21,17 +21,19 @@ $\overrightarrow{(O O')} + \overrightarrow{(O' C_i)} = \overrightarrow{(O A_i)} 
 - IK: so you'll need to solve this equation and find $\theta_{ij}$ with respect to the other variables. this will solve the inverse kinematics problem. $\theta_{1j}$ are the angles of the actuator joints.
 - FK: for forward kinematics it, the equation number 1 is solved for $p_x, p_y, p_z$ (position of the EE) with respect to other variables (which is a much easier problem that IK) 
 
-### references 
+### References 
+- here's a [good playlist](https://www.youtube.com/playlist?list=PLjx2FAhpTe3FGbcjBbxlhf56qVR0XbVNO) for learning FK and IK <br />
+<br />
+- [Delta Robot Inverse Kinematics](https://sites.google.com/site/deltarobotberkeley/how-it-works) <br />
+<br />
+- [Delta Robot Inverse Kinematics method 1](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/theory/Inverse%20Kinematics%20(Delta%20Robot).pdf) <br />
+<br />
+- [Delta Robot Inverse Kinematics method 2](https://www.researchgate.net/publication/242073945_Delta_robot_Inverse_direct_and_intermediate_Jacobians)
 
-here's a [good playlist](https://www.youtube.com/playlist?list=PLjx2FAhpTe3FGbcjBbxlhf56qVR0XbVNO) for learning FK and IK <br />
-<br />
-[here's how you would compute Delta Robot IK](https://sites.google.com/site/deltarobotberkeley/how-it-works) <br />
-<br />
-[also this pdf explains the theory and implementation pretty easily](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/theory/Inverse%20Kinematics%20(Delta%20Robot).pdf) <br />
-<br />
-
-### python implementation
-you can see my python implementation of IK in the file [trajectory_planning_345.py](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/point%20to%20point%20movement%20(python)/trajectory_planning_345.py)
+### Python implementation
+you can see my python implementation of IK:
+[method 1]()
+[method 2]()
 
 # 2. POINT TO POINT MOVEMENT
 this section is dedicated to answer how should you go about writing a code for point to point movement (moving the EE from point 1 to point 2 in 3d space )
