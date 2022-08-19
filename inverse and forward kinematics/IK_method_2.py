@@ -1,7 +1,5 @@
 class Jacobian:
-	def __init__(self, EE_position, active_rod=0.2, passive_rod=0.46, base_radius=0.3464101615, EE_radius=0.2563435195, alpha=[0, 120, 240]):
-		# i made a mistake during naming of the variables, base and EE "radius" are not exactly radiuses, they are sides of a triangle ...
-		# ... made by EE joints (the joints are the middle of the side of the traingle)
+	def __init__(self, EE_position, active_rod=0.2, passive_rod=0.46, base_triangle_side=0.3464101615, EE_triangle_side=0.2563435195, alpha=[0, 120, 240]):
 		
 		# initializing the basic geometry and the given data
 		self.alpha = np.array(alpha)							# alpha angles
@@ -46,6 +44,7 @@ class Jacobian:
 		self.theta_1 = theta_1
 		self.theta_2 = theta_2
 		self.theta_3 = theta_3
+		
 		return theta_1
 	
 	def get_jacobian_matrix(self): 

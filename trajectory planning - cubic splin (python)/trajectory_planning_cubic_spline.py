@@ -9,18 +9,9 @@
 # -- IMPORTS --------------------------------------------------------------------------------------
 # =================================================================================================
 
-from http.cookiejar import LWPCookieJar
-import time
-from typing import final
-t = time.time()
-
 import numpy as np 
 import math 
 import matplotlib.pyplot as plt 
-
-print("time is:")
-print(time.time() - t)
-
 
 # =================================================================================================
 # -- INVERSE KINEMATICS ---------------------------------------------------------------------------
@@ -180,9 +171,9 @@ class Coeff:
 		self.velo[self.n-1, :] = final_velo
 		self.velo[1:self.n-1, :] = v
 
-		print("this is A prime:\n\n", A_prime)
-		print("\n\nthis is c prime:\n\n", c_prime)
-		print("\n\nthis is velocity matrix:\n\n", self.velo)
+		# print("this is A prime:\n\n", A_prime)
+		# print("\n\nthis is c prime:\n\n", c_prime)
+		# print("\n\nthis is velocity matrix:\n\n", self.velo)
 
 	def coeff_matrix(self):
 		# initializing the coefficient matrix 
@@ -219,20 +210,20 @@ class Polynomial:
 		self.poly_matrix[0, :] = self.coeff[0, :, 0]
 		self.poly_matrix[1:, :] = self.coeff[:, :, 0] + self.coeff[:, :, 1]*self.T + self.coeff[:, :, 2]*self.T**2 + self.coeff[:, :, 3]*self.T**3
 		
-		print("\n this is polynomial matrix\n\n", self.poly_matrix, "\n", type(self.poly_matrix), "\n", self.poly_matrix.shape)
+		# print("\n this is polynomial matrix\n\n", self.poly_matrix, "\n", type(self.poly_matrix), "\n", self.poly_matrix.shape)
 
 # =================================================================================================
 # -- MAIN -----------------------------------------------------------------------------------------
 # =================================================================================================
 
-print("\n ============================= START ============================= \n")
+# print("\n ============================= START ============================= \n")
 
 generator = PositionGenerator(0.3, [0, 0, -0.38], t=0.1)
 cart_position = generator.cart_position()
 
-print("this is our cartesian positions \n\n", cart_position, "\n", type(cart_position), "\n", cart_position.shape, "\n")
+# print("this is our cartesian positions \n\n", cart_position, "\n", type(cart_position), "\n", cart_position.shape, "\n")
 
-print("\n ============================= INVERSE ============================= \n")
+# print("\n ============================= INVERSE ============================= \n")
 
 n = cart_position.shape[0] # number of points in the cartesian position
 THETA = np.zeros((n, 3)) # theta initialization for n points in 3 directions (theta1, theta2, theta3)
@@ -242,17 +233,27 @@ for i in range(n):
 	theta = inverse.get_theta()
 	THETA[i, :] = theta
 
-print("this is THETA\n\n", THETA, "\n", type(THETA), "\n", THETA.shape)
+# print("this is THETA\n\n", THETA, "\n", type(THETA), "\n", THETA.shape)
 
-print("\n ============================= POLY COEFF ============================= \n")
+# print("\n ============================= POLY COEFF ============================= \n")
 
 coeff = Coeff(THETA)
 coeff.velocity()
 coeff_matrix = coeff.coeff_matrix()
 T = coeff.T
 
-print("\n this is polynomial coefficients matrix\n\n", coeff_matrix, "\n", type(coeff_matrix), "\n", coeff_matrix.shape)
+# print("\n this is polynomial coefficients matrix\n\n", coeff_matrix, "\n", type(coeff_matrix), "\n", coeff_matrix.shape)
 
-print("\n ============================= POLY DESCRETE POINTS ============================= \n")
+# print("\n ============================= POLY DESCRETE POINTS ============================= \n")
 
 polynomial = Polynomial(coeff_matrix, T)
+
+# == TEST =========================================================================================
+inverse = InverseKinematics([0.0, 0.0, -0.38])
+inverse.get_J1_positions()
+print(inverse.get_theta())
+
+inverse = InverseKinematics([0.1, 0.2, -0.38])
+inverse.get_J1_positions()
+print(inverse.get_theta())
+

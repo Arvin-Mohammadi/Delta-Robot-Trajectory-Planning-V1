@@ -469,6 +469,6 @@ plt.show()
 # # -- TEST -----------------------------------------------------------------------------------------
 # # =================================================================================================
 
-# inverse = InverseKinematics([0.0, 0.0, -0.38])
-# inverse.get_J1_positions()
-# print(inverse.get_theta()*180/math.pi)
+inverse = InverseKinematics([0.0, 0.0, -0.38])
+inverse.get_J1_positions()
+print(inverse.get_theta()*180/math.pi)
