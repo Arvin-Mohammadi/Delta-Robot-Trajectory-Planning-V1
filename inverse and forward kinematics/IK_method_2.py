@@ -8,7 +8,7 @@
 
 import numpy as np 
 import math 
-from math import sin, cos 
+from math import sin, cos, acos, asin
 from numpy.linalg import inv
 import matplotlib.pyplot as plt 
 import time
@@ -18,7 +18,7 @@ import time
 # =================================================================================================
 
 class Jacobian:
-	def __init__(self, EE_position, active_rod=0.2, passive_rod=0.46, base_triangle_side=0.3464101615, EE_triangle_side=0.2563435195, alpha=[0, 120, 240]):
+	def __init__(self, EE_position, active_rod=0.2, passive_rod=0.46, base_triangle_side=0.3464101615, EE_triangle_side=0.2563435195, alpha=[90, 210, 330]):
 		
 		# initializing the basic geometry and the given data
 		self.alpha = np.array(alpha)							# alpha angles
@@ -43,6 +43,9 @@ class Jacobian:
 		py = self.EE_position_global[1]
 		pz = self.EE_position_global[2]
 
+		# px = -abs(px)
+		# py = abs(py)
+
 		# initializing theta 1, 2, 3
 		theta_1 = np.zeros((3))
 		theta_2 = np.zeros((3))
@@ -50,16 +53,17 @@ class Jacobian:
 
 		# calculating theta 1, 2, 3
 		for i in [0, 1, 2]:
-			theta_3[i] = math.acos((px*sin(alpha[i]) + py*cos(alpha[i]))/b)
+			theta_3[i] = acos((px*sin(alpha[i]) + py*cos(alpha[i]))/b)
 
 			A = px*cos(alpha[i]) - py*sin(alpha[i]) - R + r
 			B = pz
-			M = (A**2 + B**2 + a**2 - (b*sin(theta_3[i]))**2)/(2*a)
-			t = (B + (B**2 - M**2 + A**2)**0.5)/(M + A)
+			M = -(A**2 + B**2 + a**2 - (b*sin(theta_3[i]))**2)/(2*a)
+			t = (-A + (A**2 + B**2 - M**2)**0.5)/(M - B)
 			theta_1[i] = 2*math.atan(t)
-			theta_2[i] = math.asin((pz - a*sin(theta_1[i]))/(b*sin(theta_3[i]))) - theta_1[i]
+			theta_2[i] = 0
 		
 		theta_1 *= 180/math.pi
+		theta_1 -= 90
 		theta_2 *= 180/math.pi
 		theta_3 *= 180/math.pi
 		
@@ -92,12 +96,17 @@ class Jacobian:
 # =================================================================================================
 t = time.time()
 
-jacobian = Jacobian([0.0, 0.0, -0.38])
+jacobian = Jacobian([0.05, 0.05, -0.31])
 print(jacobian.inverse_kinematics())
 
-
-jacobian = Jacobian([0.1, 0.2, -0.38])
+jacobian = Jacobian([-0.05, 0.05, -0.40])
 print(jacobian.inverse_kinematics())
 
-print("time is:")
-print(time.time() - t)
+jacobian = Jacobian([-0.10, -0.10, -0.42])
+print(jacobian.inverse_kinematics())
+
+jacobian = Jacobian([0.0, -0.15, -0.42])
+print(jacobian.inverse_kinematics())
+
+jacobian = Jacobian([-0.15, 0.1, -0.42])
+print(jacobian.inverse_kinematics())
