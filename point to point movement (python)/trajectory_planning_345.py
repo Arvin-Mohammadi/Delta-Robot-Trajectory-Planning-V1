@@ -259,7 +259,6 @@ tau = np.array(range(0, T))/T 	# normalized time
 
 position = np.zeros(theta.shape)
 for idx, i in enumerate(theta.transpose()):
-	print(idx)
 	position[:, idx] = forward_kinematics(theta[:, idx])
 
 plt.grid(True)
