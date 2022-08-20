@@ -94,12 +94,17 @@ class InverseKinematics:
 # =================================================================================================
 t = time.time()
 
-inverse = InverseKinematics([0.0, 0.0, -0.38])
+inverse = InverseKinematics([0.05, 0.05, -0.31])
 print(inverse.get_theta(inverse.get_J1_positions()))
 
-
-inverse = InverseKinematics([0.1, 0.2, -0.38])
+inverse = InverseKinematics([-0.05, 0.05, -0.40])
 print(inverse.get_theta(inverse.get_J1_positions()))
 
-print("time is:")
-print(time.time() - t)
+inverse = InverseKinematics([-0.10, -0.10, -0.42])
+print(inverse.get_theta(inverse.get_J1_positions()))
+
+inverse = InverseKinematics([0.0, -0.15, -0.42])
+print(inverse.get_theta(inverse.get_J1_positions()))
+
+inverse = InverseKinematics([-0.15, 0.1, -0.42])
+print(inverse.get_theta(inverse.get_J1_positions()))
