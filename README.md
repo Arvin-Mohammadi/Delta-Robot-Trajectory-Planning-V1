@@ -68,7 +68,7 @@ cubic spline (book Trajectory Planning for Automatix Machines and Robots by Luig
 # 3. TRAJECTORY PLANNING (TRYING OTHER ALGORITHMS) 
 
 ## 1) Jacobian 
-
+The jacobian matrix relates velocity of EE to the velocity of actuator joints with the relation: $\vec{v} = J \dot{\vec{\theta}}$
 ### theory
 1. [what is Jacobian matrix and how it is calculated](https://www.sciencedirect.com/science/article/pii/S1877050918309876)
 2. [how jacobian matrix is used in delta robot trajectory palanning](http://jai.front-sci.com/index.php/jai/article/view/505)
