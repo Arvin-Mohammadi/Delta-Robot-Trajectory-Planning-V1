@@ -84,5 +84,5 @@ from these equation we solve for $\theta_{ij}$ (solution of IK) and solve for $p
 
 - [jacobian file: IK, FK, jacobian matrix calculation](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/inverse%20and%20forward%20kinematics/IK_method_2.py)
 
-# 2.5 - TRAPEZOIDAL TRAJECTORY PLANNING
+# 3 - TRAPEZOIDAL TRAJECTORY PLANNING
   
