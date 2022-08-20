@@ -46,7 +46,7 @@ Mechanical Systems, theory, methods, and Algorithms, Fourth Edition by Jorge Ang
 - POINT TO POINT MOVEMENT (3-4-5 polynomial):
   moveing from point to point in the direction desired --> [trajectory_planning_345.py](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/point%20to%20point%20movement%20(python)/trajectory_planning_345.py)
 
-![345 point-to-point](https://i.ibb.co/HGQvTwT/345.png)
+![345 point-to-point](https://i.ibb.co/TK8b9z8/345.png)
 - POINT TO POINT MOVEMENT (4-5-6-7 polynomial):
   we repeat what we've done for sub-step 2 but with a 7th order polynomial --> [trajectory_planning_4567.py](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/point%20to%20point%20movement%20(python)/trajectory_planning_4567.py)
 
