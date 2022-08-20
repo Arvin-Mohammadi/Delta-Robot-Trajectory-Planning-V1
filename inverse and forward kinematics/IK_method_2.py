@@ -1,3 +1,23 @@
+# this needs fixing 
+# THE JACOBIAN MATRICES
+# in this python file i'll attempt to calculate jacobian matrix and sigularities of the Delta Robot
+
+# =================================================================================================
+# -- IMPORTS --------------------------------------------------------------------------------------
+# =================================================================================================
+
+from re import X
+import numpy as np 
+import math 
+from math import sin, cos 
+from numpy.linalg import inv
+import matplotlib.pyplot as plt 
+import time
+
+# =================================================================================================
+# -- JACOBIAN MATRICES ----------------------------------------------------------------------------
+# =================================================================================================
+
 class Jacobian:
 	def __init__(self, EE_position, active_rod=0.2, passive_rod=0.46, base_triangle_side=0.3464101615, EE_triangle_side=0.2563435195, alpha=[0, 120, 240]):
 		
@@ -6,16 +26,16 @@ class Jacobian:
 		self.EE_position_global = np.array(EE_position)			# end effoctor position (x_e, y_e, z_e) with respect to alpha1 = 0								
 		self.active_rod = active_rod							# length of the active rod (the upper rod or r_f)
 		self.passive_rod = passive_rod							# length of the passive rod (the lower rod or r_e)
-		self.EE_radius = EE_radius								# the radius of the end effoctor e 
-		self.base_radius = base_radius							# the radius of the base or f
+		self.EE_triangle_side = EE_triangle_side								# the radius of the end effoctor e 
+		self.base_triangle_side = base_triangle_side							# the radius of the base or f
 
-	def get_theta_ij(self): 
+	def inverse_kinematics(self): 
 		# this also calculate inverse kinematic
 
 		# assigning constants
 		alpha = math.pi/180*self.alpha
-		R = self.base_radius*(3**0.5/6)
-		r = self.EE_radius*(3**0.5/6)
+		R = self.base_triangle_side*(3**0.5/6)
+		r = self.EE_triangle_side*(3**0.5/6)
 		a = self.active_rod
 		b = self.passive_rod
 
@@ -40,15 +60,18 @@ class Jacobian:
 			theta_1[i] = 2*math.atan(t)
 			theta_2[i] = math.asin((pz - a*sin(theta_1[i]))/(b*sin(theta_3[i]))) - theta_1[i]
 		
-		# now we have all of the theta 1, 2 and 3 
-		self.theta_1 = theta_1
-		self.theta_2 = theta_2
-		self.theta_3 = theta_3
+		theta_1 *= 180/math.pi
+		theta_2 *= 180/math.pi
+		theta_3 *= 180/math.pi
 		
-		return theta_1
+		return (theta_1, theta_2, theta_3)
 	
-	def get_jacobian_matrix(self): 
+	def get_jacobian_matrix(self, theta_1, thetea_2, theta_3): 
 		
+		theta_1 /= 180/math.pi
+		theta_2 /= 180/math.pi
+		theta_3 /= 180/math.pi
+
 		# initializing J_ij 
 		jx = np.zeros((3))
 		jy = np.zeros((3))
@@ -57,10 +80,25 @@ class Jacobian:
 		J_theta = np.zeros((3, 3))
 
 		for i in [0, 1, 2]:
-			jx[i] =  sin(self.theta_3[i])*cos(self.theta_2[i] + self.theta_1[i])*cos(self.alpha[i]) + cos(self.theta_3[i])*sin(self.alpha[i])
-			jy[i] = -sin(self.theta_3[i])*cos(self.theta_2[i] + self.theta_1[i])*sin(self.alpha[i]) + cos(self.theta_3[i])*cos(self.alpha[i])
-			jz[i] =  sin(self.theta_3[i])*sin(self.theta_2[i] + self.theta_1[i])
+			jx[i] =  sin(theta_3[i])*cos(theta_2[i] + theta_1[i])*cos(self.alpha[i]) + cos(theta_3[i])*sin(self.alpha[i])
+			jy[i] = -sin(theta_3[i])*cos(theta_2[i] + theta_1[i])*sin(self.alpha[i]) + cos(theta_3[i])*cos(self.alpha[i])
+			jz[i] =  sin(theta_3[i])*sin(theta_2[i] + theta_1[i])
 			J_P[i, :] = [jx[i], jy[i], jz[i]]
-			J_theta[i, i] = sin(self.theta_2[i])*sin(self.theta_3[i])
+			J_theta[i, i] = sin(theta_2[i])*sin(theta_3[i])
 		
 		return (J_P, J_theta)
+
+# =================================================================================================
+# -- TEST ----------------------------------------------------------------------
+# =================================================================================================
+t = time.time()
+
+jacobian = Jacobian([0.0, 0.0, -0.38])
+print(jacobian.inverse_kinematics())
+
+
+jacobian = Jacobian([0.1, 0.2, -0.38])
+print(jacobian.inverse_kinematics())
+
+print("time is:")
+print(time.time() - t)

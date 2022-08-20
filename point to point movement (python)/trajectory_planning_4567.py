@@ -9,14 +9,10 @@
 # =================================================================================================
 
 import time
-t = time.time()
-
 import numpy as np 
 import math 
-import matplotlib.pyplot as plt 
-
-# print("time is:")
-# print(time.time() - t)
+import matplotlib.pyplot as plt
+from math import sin, cos 
 
 # =================================================================================================
 # -- FORWARD KINEMATICS ---------------------------------------------------------------------------
@@ -245,8 +241,11 @@ class PointToPoint4567Movement:
 
 	def theta_t(self):
 		# we find the angular position profile in this part
+		print(self.T)
 		T = math.floor(self.T*1000)
+
 		tau = np.array(range(0, T))/T
+		print(tau.shape)
 		s_tau = -20*tau**7 + 70*tau**6 - 84*tau**5 + 35*tau**4
 		theta_t = np.array(self.theta_i) + np.array(self.theta_f - self.theta_i)*s_tau
 
@@ -261,15 +260,15 @@ class PointToPoint4567Movement:
 movement = PointToPoint4567Movement([0.05, 0.05, -0.31], [0, -0.15, -0.42])
 movement.inverse_kinematics()
 movement.T()
-theta_dot = movement.theta_dot_t()/50 
-theta = movement.theta_t()/50 - 47.2
+theta_dot = movement.theta_dot_t() 
+theta = movement.theta_t()
 
 # initializing Position
 P = np.zeros(theta.shape)
 
-for i in range(movement.theta_t().shape[1]):
-	forward = ForwardKinematics(movement.theta_t()[:, i])
-	P[:, i] = forward.get_position()
+# for i in range(movement.theta_t().shape[1]):
+# 	forward = ForwardKinematics(movement.theta_t()[:, i])
+# 	P[:, i] = forward.get_position()
 
 T = math.floor(movement.T*1000)
 tau = np.array(range(0, T))/T

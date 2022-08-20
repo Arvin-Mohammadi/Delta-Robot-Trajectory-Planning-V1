@@ -2,6 +2,7 @@ import numpy as np
 import math 
 import matplotlib.pyplot as plt
 from math import sin, cos
+import time
 
 # =================================================================================================
 # -- INVERSE KINEMATICS ---------------------------------------------------------------------------
@@ -91,6 +92,7 @@ class InverseKinematics:
 # =================================================================================================
 # -- TEST ----------------------------------------------------------------------
 # =================================================================================================
+t = time.time()
 
 inverse = InverseKinematics([0.0, 0.0, -0.38])
 print(inverse.get_theta(inverse.get_J1_positions()))
@@ -98,3 +100,6 @@ print(inverse.get_theta(inverse.get_J1_positions()))
 
 inverse = InverseKinematics([0.1, 0.2, -0.38])
 print(inverse.get_theta(inverse.get_J1_positions()))
+
+print("time is:")
+print(time.time() - t)
