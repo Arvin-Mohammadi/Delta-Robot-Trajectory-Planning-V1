@@ -11,8 +11,7 @@ with trajectory planning there are two fundemental questions we need an answer f
 2. given the setting of my joints, where is my EE in real world coordinates? (forward kinematics)
 
 ### Theory
-![delta robot kinemtaics figure 1](https://i.ibb.co/cc29GYf/Delta-robot-kin.png)
-![delta robot kinemtaics figure 2](https://i.ibb.co/VVVQfkF/Delta-robot-kin-2.png)
+![delta robot kinemtaics figure 1](https://i.ibb.co/cc29GYf/Delta-robot-kin.png) ![delta robot kinemtaics figure 2](https://i.ibb.co/VVVQfkF/Delta-robot-kin-2.png)
 
 The Delta robot is a 3-DOF robot that consists of two parallel platforms. One of them, which we call the EE platform, is capable of moving and the other one, which we call base platform, is not capable of that. These two platforms are connected with three arms. Each arm has one pin and two universal joints (as shown in the figure) that connect two solid rods. The rod which is connected to base platform by the pin, is called the active rod, and the other one is called the passive rod. The center of the base and EE platforms are marked as $O$ and $O'$ respectively.  The pin is denoted as A, the universal joint connecting the passive and active rods, is denoted as B. The universal joint connecting the EE platform and the passive rod is denoted as C. 
 
