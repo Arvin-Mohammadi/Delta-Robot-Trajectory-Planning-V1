@@ -65,14 +65,21 @@ cubic spline (book Trajectory Planning for Automatix Machines and Robots by Luig
 - CIRCLE MOVEMENT:
   cubic spline with assigned initial and final velocities and acceleration --> [trajectory_planing_cubic_spline_4.4.4.py](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/trajectory%20planning%20-%20cubic%20splin%20(python)/trajectory_planning_cubic_spline_4.4.4.py)
 
-# 3. TRAJECTORY PLANNING (TRYING OTHER ALGORITHMS) 
-
-## 1) Jacobian 
+# 3. TRAJECTORY PLANNING (Using Jacobian and Trapezoidal method) 
 The jacobian matrix relates velocity of EE to the velocity of actuator joints with the relation: $\vec{v} = J \dot{\vec{\theta}}$
+
 ### theory
+for the IK we have the equations as followed 
+$p_x \cos(\Phi_i) - p_y \sin(\Phi_i) = R - r + a \cos(\theta_{1i}) + b \sin(\theta_{3i}) \cos(\theta_{2i} + \theta_{1i})$ (equation 1)
+$p_x \sin(\Phi_i) + p_y \cos(\Phi_i) = b \cos(\theta_{3i}) $ (equation 2)
+$p_z = a \sin(\theta_{2i}) + b \sin(\theta_{3i}) \sin(\theta_{2i} + \theta_{1i}) $ (equation 3)
+
+from these equation we solve for $\theta_{ij}$ 
+
 1. [what is Jacobian matrix and how it is calculated](https://www.sciencedirect.com/science/article/pii/S1877050918309876)
 2. [how jacobian matrix is used in delta robot trajectory palanning](http://jai.front-sci.com/index.php/jai/article/view/505)
 3. [detailed calculation and analysis of Jacobian matrix in delta robot](http://jai.front-sci.com/index.php/jai/article/view/505)
 
 ### python implementation
 
+- [jacobian file: IK, FK, jacobian matrix calculation](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/inverse%20and%20forward%20kinematics/IK_method_2.py)
