@@ -70,9 +70,9 @@ The jacobian matrix relates velocity of EE to the velocity of actuator joints wi
 
 ### theory
 for the IK we have the equations as followed 
-- $p_x \cos(\Phi_i) - p_y \sin(\Phi_i) = R - r + a \cos(\theta_{1i}) + b \sin(\theta_{3i}) \cos(\theta_{2i} + \theta_{1i})$ (equation 1)
-- $p_x \sin(\Phi_i) + p_y \cos(\Phi_i) = b \cos(\theta_{3i})$ (equation 2)
-- $p_z = a \sin(\theta_{2i}) + b \sin(\theta_{3i}) \sin(\theta_{2i} + \theta_{1i})$ (equation 3)
+- $p_x \cos(\Phi_i) - p_y \sin(\Phi_i) = R - r + a \cos(\theta_{1i}) + b \sin(\theta_{3i}) \cos(\theta_{2i} + \theta_{1i})$       (equation 1)
+- $p_x \sin(\Phi_i) + p_y \cos(\Phi_i) = b \cos(\theta_{3i})$       (equation 2)
+- $p_z = a \sin(\theta_{2i}) + b \sin(\theta_{3i}) \sin(\theta_{2i} + \theta_{1i})$       (equation 3)
 
 from these equation we solve for $\theta_{ij}$ 
 
