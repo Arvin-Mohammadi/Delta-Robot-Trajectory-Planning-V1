@@ -5,14 +5,13 @@
 this will be a step by step demonstration of how to control trajectory of a Delta robot End-Effector
 check out my [telegram channel](https://t.me/engineering_stuff_69)
 
-# 1. ROBOTICS (INVERSE AND FORWARD KINEAMTICS)
+# 1 - ROBOTICS (INVERSE AND FORWARD KINEAMTICS)
 with trajectory planning there are two fundemental questions we need an answer for:
 1. given a specific location in the real world, what values should my robot's joint be set to in order to get the End-Effector there? (inverse kinematics)
 2. given the setting of my joints, where is my EE in real world coordinates? (forward kinematics)
 
 ### Theory
-![delta robot kinemtaics figure 1](https://i.ibb.co/cc29GYf/Delta-robot-kin.png)
-![delta robot kinemtaics figure 2](https://i.ibb.co/VVVQfkF/Delta-robot-kin-2.png)
+![delta robot kinemtaics figure 1](https://i.ibb.co/cc29GYf/Delta-robot-kin.png) ![delta robot kinemtaics figure 2](https://i.ibb.co/VVVQfkF/Delta-robot-kin-2.png)
 
 The Delta robot is a 3-DOF robot that consists of two parallel platforms. One of them, which we call the EE platform, is capable of moving and the other one, which we call base platform, is not capable of that. These two platforms are connected with three arms. Each arm has one pin and two universal joints (as shown in the figure) that connect two solid rods. The rod which is connected to base platform by the pin, is called the active rod, and the other one is called the passive rod. The center of the base and EE platforms are marked as $O$ and $O'$ respectively.  The pin is denoted as A, the universal joint connecting the passive and active rods, is denoted as B. The universal joint connecting the EE platform and the passive rod is denoted as C. 
 
@@ -35,7 +34,7 @@ you can see my [python implementation of IK](https://github.com/ArthasMenethil-A
 - [method 1](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/inverse%20and%20forward%20kinematics/IK_method_1.py)
 - [method 2](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/inverse%20and%20forward%20kinematics/IK_method_2.py)
 
-# 2. POINT TO POINT MOVEMENT
+# 2 - POINT TO POINT MOVEMENT
 this section is dedicated to answer how should you go about writing a code for point to point movement (moving the EE from point 1 to point 2 in 3d space )
 
 ### theory
@@ -46,10 +45,11 @@ Mechanical Systems, theory, methods, and Algorithms, Fourth Edition by Jorge Ang
 - POINT TO POINT MOVEMENT (3-4-5 polynomial):
   moveing from point to point in the direction desired --> [trajectory_planning_345.py](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/point%20to%20point%20movement%20(python)/trajectory_planning_345.py)
 
+![345 point-to-point](https://i.ibb.co/TK8b9z8/345.png)
 - POINT TO POINT MOVEMENT (4-5-6-7 polynomial):
   we repeat what we've done for sub-step 2 but with a 7th order polynomial --> [trajectory_planning_4567.py](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/point%20to%20point%20movement%20(python)/trajectory_planning_4567.py)
 
-# 3. TRAJECTORY PLANNING (CUBIC SPLINE AND SIMILAR ALGORITHMS)
+# 3 - TRAJECTORY PLANNING (CUBIC SPLINE AND SIMILAR ALGORITHMS)
 this section is dedicated to planning out a specific trajectory for the robot to go through
 
 ### theory
@@ -65,7 +65,7 @@ cubic spline (book Trajectory Planning for Automatix Machines and Robots by Luig
 - CIRCLE MOVEMENT:
   cubic spline with assigned initial and final velocities and acceleration --> [trajectory_planing_cubic_spline_4.4.4.py](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/trajectory%20planning%20-%20cubic%20splin%20(python)/trajectory_planning_cubic_spline_4.4.4.py)
 
-# 3. TRAJECTORY PLANNING (Using Jacobian and Trapezoidal method) 
+# 2.5 - JACOBIAN
 The jacobian matrix relates velocity of EE to the velocity of actuator joints with the relation: $\vec{v} = J \dot{\vec{\theta}}$
 
 ### theory
@@ -74,7 +74,7 @@ for the IK we have the equations as followed
 - $p_x \sin(\Phi_i) + p_y \cos(\Phi_i) = b \cos(\theta_{3i})$       (equation 2)
 - $p_z = a \sin(\theta_{2i}) + b \sin(\theta_{3i}) \sin(\theta_{2i} + \theta_{1i})$       (equation 3)
 
-from these equation we solve for $\theta_{ij}$ 
+from these equation we solve for $\theta_{ij}$ (solution of IK) and solve for $p_x, p_y, p_z$ (solution of FK)
 
 1. [what is Jacobian matrix and how it is calculated](https://www.sciencedirect.com/science/article/pii/S1877050918309876)
 2. [how jacobian matrix is used in delta robot trajectory palanning](http://jai.front-sci.com/index.php/jai/article/view/505)
@@ -83,3 +83,6 @@ from these equation we solve for $\theta_{ij}$
 ### python implementation
 
 - [jacobian file: IK, FK, jacobian matrix calculation](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/inverse%20and%20forward%20kinematics/IK_method_2.py)
+
+# 3 - TRAPEZOIDAL TRAJECTORY PLANNING
+  
