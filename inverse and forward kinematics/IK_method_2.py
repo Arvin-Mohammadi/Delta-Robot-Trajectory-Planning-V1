@@ -66,8 +66,11 @@ class Jacobian:
 		theta_2 *= 180/math.pi
 		theta_3 *= 180/math.pi
 
-		theta_1_new = theta_1 - 90 # need this for writing the file 
-		
+		theta_1_new = np.zeros((3))
+		theta_1_new[0] = theta_1[0] - 90 # need this for writing the file 
+		theta_1_new[1] = theta_1[2] - 90
+		theta_1_new[2] = theta_1[1] - 90
+
 		return (theta_1, theta_2, theta_3)
 	
 	def get_jacobian_matrix(self, theta_1, thetea_2, theta_3): 
@@ -108,9 +111,10 @@ class Jacobian:
 
 
 		px = cos(alpha)*(R - r + a*cos(theta_1) + b*sin(theta_3)*cos(theta_2 + theta_1)) + sin(alpha)*b*cos(theta_3)
-		py = b - sin(alpha)*(R -r + a*cos(theta_1) + b*sin(theta_3)*cos(theta_2 + theta_1)) + (cos(alpha) - 1/cos(alpha))*b*cos(theta_3) # not correct 
-		pz = a*sin(theta_2) + b*sin(theta_3)*sin(theta_2 + theta_1) # not correct 
-
+		py = sin(alpha)*(r - R - a*cos(theta_1) - b*sin(theta_3)*cos(theta_2 + theta_1)) + cos(alpha)*b*cos(theta_3)
+		pz = a*sin(theta_1) + b*sin(theta_3)*sin(theta_2 + theta_1) # not correct why ???
+		
+		print(px, py, pz)
 		return (px, py, pz)
 # =================================================================================================
 # -- TEST ----------------------------------------------------------------------
@@ -118,31 +122,31 @@ class Jacobian:
 t = time.time()
 
 jacobian = Jacobian([0.05, 0.05, -0.31])
-print(jacobian.inverse_kinematics())
+# print(jacobian.inverse_kinematics())
 temp_theta = np.array(jacobian.inverse_kinematics()).transpose()[0]
-print(temp_theta)
-print(jacobian.forward_kinematics(temp_theta))
+# print(temp_theta)
+jacobian.forward_kinematics(temp_theta)
 
 jacobian = Jacobian([-0.05, 0.05, -0.40])
-print(jacobian.inverse_kinematics())
+print(jacobian.inverse_kinematics()[0])
 temp_theta = np.array(jacobian.inverse_kinematics()).transpose()[0]
-print(temp_theta)
-print(jacobian.forward_kinematics(temp_theta))
+# print(temp_theta)
+jacobian.forward_kinematics(temp_theta)
 
 jacobian = Jacobian([-0.10, -0.10, -0.42])
-print(jacobian.inverse_kinematics())
+print(jacobian.inverse_kinematics()[0])
 temp_theta = np.array(jacobian.inverse_kinematics()).transpose()[0]
-print(temp_theta)
-print(jacobian.forward_kinematics(temp_theta))
+# print(temp_theta)
+jacobian.forward_kinematics(temp_theta)
 
 jacobian = Jacobian([0.0, -0.15, -0.42])
-print(jacobian.inverse_kinematics())
+print(jacobian.inverse_kinematics()[0])
 temp_theta = np.array(jacobian.inverse_kinematics()).transpose()[0]
-print(temp_theta)
-print(jacobian.forward_kinematics(temp_theta))
+# print(temp_theta)
+jacobian.forward_kinematics(temp_theta)
 
 jacobian = Jacobian([-0.15, 0.1, -0.42])
-print(jacobian.inverse_kinematics())
+print(jacobian.inverse_kinematics()[0])
 temp_theta = np.array(jacobian.inverse_kinematics()).transpose()[0]
-print(temp_theta)
-print(jacobian.forward_kinematics(temp_theta))
+# print(temp_theta)
+jacobian.forward_kinematics(temp_theta)
