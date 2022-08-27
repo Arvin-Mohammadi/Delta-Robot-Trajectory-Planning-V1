@@ -20,7 +20,7 @@ class BSpline:
 		self.t = np.array(t)	# the time instants array 
 		self.n = self.q.shape[0] - 1
 
-	def get_u_vector(self, t, p):
+	def get_u(self, t, p):
 		t = np.array(t)
 		n = t.shape[0] - 1
 
@@ -41,51 +41,42 @@ class BSpline:
 
 		return u
 
-	def which_span(self, u, u_instant, p=4):
+	def get_B_P(self, u, u_instant, p=4): 
 		u = np.array(u)
 		n_knot = u.shape[0] - 1
-		high = n_knot - p
-		low = p
+		B = np.zeros((p+1, n_knot+1)) # initializing B-spline basis functions
 
-		if u_instant == u[high]:
-			mid = high
-		else: 
-			mid = (high+low)/2
-			mid = int(mid)
-			check = (u_instant < u[mid]) or (u_instant >= u[mid+1])
-			while(check):
+		for j, u_j in enumerate(u):
+			if j+1 == n_knot and (u_instant >= u[j]):
+				B[0, j] = 1
+				break
+			elif (u_instant >= u[j]) and (u_instant < u[j+1]):
+				B[0, j] = 1
+			else:
+				B[0, j] = 0
 
-				if u_instant == u[int(mid+1)]:
-					mid = mid+1
+		# defining B spline for p>0
+		for i in range(1, p+1):
+			for j, u_j in enumerate(u):
+				if j+i+1 >= n_knot:
+					B[i, j] = B[i-1, j] + B[i-1, j+1]
+					break
+				elif (u_instant >= u[j]) and (u_instant < u[j+i+1]):
+					if (u[j+i] - u[j]) != 0 and (u[j+i+1] - u[j+1]) != 0:
+						B[i, j] = (u_instant - u[j])/(u[j+i] - u[j])*B[i-1, j] + (u[j+i+1] - u_instant)/(u[j+i+1] - u[j+1])*B[i-1, j+1]
+					if (u[j+i] - u[j]) != 0 and (u[j+i+1] - u[j+1]) == 0:
+						B[i, j] = (u_instant - u[j])/(u[j+i] - u[j])*B[i-1, j] + B[i-1, j+1]
+					if (u[j+i] - u[j]) == 0 and (u[j+i+1] - u[j+1]) != 0:
+						B[i, j] = B[i-1, j] + (u[j+i+1] - u_instant)/(u[j+i+1] - u[j+1])*B[i-1, j+1]
+					if (u[j+i] - u[j]) == 0 and (u[j+i+1] - u[j+1]) == 0:
+						B[i, j] = B[i-1, j] + B[i-1, j+1]
+
 				else:
-					if u_instant > u[int(mid)]:
-						low = mid
-					else:
-						high = mid
-					mid = (high+low)/2
+					B[i, j] = 0
+		
+		return B[-1, :]
 
-		return mid
-
-	def get_basis_function(self, i, u, u_instant, p=4): 
-		u = np.array(u)
-		n_knot = u.shape[0] - 1
-		B = np.array((p+1))
-		DL = np.array((p+1))
-		DR = np.array((p+1))
-
-		B[0] = 1
-		for j in range(1, p+1):
-			DL[j] = u_instant - u[i+1-j]
-			DR[j] = u[i+j] - u_instant
-			acc = 0 
-			for r in range(j):
-				temp = B[r]/(DR[r+1] + DL[j-r])
-				B[r] = acc + DR[r+1]*temp
-				acc = DL[j-r]*temp
-			B[j] = acc
-
-		return B
-	def get_basis_function_derivative(self, u, B, p=4):
+	def get_B_P_derivative(self, u, B, p=4):
 		B = np.array(B)
 		u = np.array(u)
 		n_knot = u.shape[0] - 1
@@ -102,7 +93,7 @@ class BSpline:
 
 		return B_derive
 
-	def get_A_matrix(self, u, p=4):
+	def get_A(self, u, p=4):
 
 		u = np.array(u)
 		n_knot = u.shape[0]-1
@@ -117,7 +108,7 @@ class BSpline:
 
 		return A
 
-	def get_c_matrix(self): 
+	def get_c(self): 
 		c = 0 
 
 		return c 
@@ -129,8 +120,7 @@ class BSpline:
 # -- MAIN --------------------------------------------------------------------------------------
 # =================================================================================================
 u = [0, 0, 0, 0, 1, 2, 4, 7, 7, 7, 7]
-u_instant = 1.5
-
+u_instant = 4.5
 traj = BSpline([0], [0])
-i = traj.which_span(u, u_instant, p=3)
-print(i)
+B = traj.get_B_P(u, u_instant, p=3)
+print(B)
