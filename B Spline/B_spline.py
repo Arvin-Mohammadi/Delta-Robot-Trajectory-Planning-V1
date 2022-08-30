@@ -158,16 +158,17 @@ class BSpline:
 
 			i = self.which_span(u, t[idx])
 			if idx == 0:
-				B = traj.get_basis_function_derivative(u, t[idx], i, n=2, p=4)
+				B = traj.get_basis_function_derivative(u, t[idx], i, n=2, p=p)
+				print(B)
 				A[row:row+3, idx:idx+p+1] = B
 				row += 2
 			elif idx == t.shape[0]-1:
 				print(i)
-				B = traj.get_basis_function_derivative(u, t[idx], i, n=2, p=4)
+				B = traj.get_basis_function_derivative(u, t[idx], i, n=2, p=p)
 				B = np.flipud(B)
 				A[row:row+3, idx:idx+p+1] = B
 			else:
-				B = traj.get_basis_function(u, t[idx], i, p=4)
+				B = traj.get_basis_function(u, t[idx], i, p=p)
 				A[row, idx:idx+p+1] = B
 			
 			idx += 1
@@ -189,30 +190,63 @@ class BSpline:
 		return matmul(inv(A), c)
 
 # =================================================================================================
+# -- POSITION GENERATOR ---------------------------------------------------------------------------
+# =================================================================================================
+
+# in this part we try to generate a circle and get n sample points from that circle. 
+# this results in having n-1 cartesian points (matrix.shape=(n-1, 3))
+
+class PositionGenerator:
+
+	def __init__(self, ratio, center):
+		# t is in seconds
+		n = 500
+		pi = math.pi
+		self.n = int(n)
+		self.ratio = ratio		# r
+		self.center = center	# xc, yc, zc
+		self.gamma = np.linspace(0, 2*pi, num=self.n+1)
+
+	def cart_position(self):
+		# self.points is the positions of the n points in x, y and z directions (n*3 matrix)
+		self.points = np.array([np.cos(self.gamma)*self.ratio + np.ones((self.n+1))*self.center[0], np.sin(self.gamma)*self.ratio + np.ones((self.n+1))*self.center[1], np.ones((self.n+1))*self.center[2]])
+		self.points = np.transpose(self.points)
+		return self.points
+
+# =================================================================================================
 # -- MAIN --------------------------------------------------------------------------------------
 # =================================================================================================
-u = [0, 0, 0, 0, 1, 2, 4, 7, 7, 7, 7]
-u_instant = 7
+# u = [0, 0, 0, 0, 1, 2, 4, 7, 7, 7, 7]
+# u_instant = 7
 
-traj = BSpline([0], [0])
-i = traj.which_span(u, u_instant, p=3)
-# B = traj.get_basis_function(u, u_instant, i, p=3)
-# print(B)
-# print(i)
-B_ders = traj.get_basis_function_derivative(u, u_instant, i, n=3, p=3)
-# print(B_ders)
+# traj = BSpline([0], [0])
+# i = traj.which_span(u, u_instant, p=3)
+# # B = traj.get_basis_function(u, u_instant, i, p=3)
+# # print(B)
+# # print(i)
+# B_ders = traj.get_basis_function_derivative(u, u_instant, i, n=3, p=3)
+# # print(B_ders)
+# # =================================================================================================
+# t = [0, 5, 7, 8, 10, 15, 18]
+# q = [3, -2, -5, 0, 6, 12, 8]
+# vi = 2
+# vf = -3
+# ai = 0
+# af = 0
+# traj = BSpline(q, t)
+# u = traj.get_u_vector(t)
+# A = traj.get_A_matrix(u)
+# c = traj.get_c_matrix(vi, ai, vf, af)
+# print(A)
+# print(c)
+# p = traj.get_P(A, c)
+# print(p)
 # =================================================================================================
-t = [0, 5, 7, 8, 10, 15, 18]
-q = [3, -2, -5, 0, 6, 12, 8]
-vi = 2
-vf = -3
-ai = 0
-af = 0
-traj = BSpline(q, t)
-u = traj.get_u_vector(t)
-A = traj.get_A_matrix(u)
-c = traj.get_c_matrix(vi, ai, vf, af)
-print(A)
-print(c)
-p = traj.get_P(A, c)
-print(p)
+generator = PositionGenerator(0.3, [0, 0, 0])
+q = generator.cart_position()[:, 0]
+vi = 0 
+ai = 0 
+vf = 0 
+af = 0 
+
+c = np.zeros((q.shape[0] + 4))
