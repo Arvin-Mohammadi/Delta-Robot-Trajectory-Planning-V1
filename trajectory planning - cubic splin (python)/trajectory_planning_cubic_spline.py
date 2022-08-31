@@ -340,8 +340,6 @@ position = np.zeros(theta.shape)
 for idx, i in enumerate(theta):
 	position[idx] = forward_kinematics(i)
 
-print(position)
-
 plt.grid(True)
 plt.plot(position.transpose()[0], position.transpose()[1])
 plt.title("x-y plane")
@@ -349,3 +347,7 @@ plt.xlabel("x (m)")
 plt.ylabel("y (m)")
 plt.savefig("E:\\cubic-spline-3.png")
 plt.clf()
+
+
+np.save("E:\\theta.npy", theta[:, 0])
+np.save("E:\\t.npy", t)
