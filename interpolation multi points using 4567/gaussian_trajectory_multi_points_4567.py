@@ -170,7 +170,7 @@ def j_profile(t, t_new, v, s):
 def main():
 
 	v_max = 1
-	n_segment = 10
+	n_segment = 1000
 	position_vector = [0, 0.01, 0.03, 0.07, 0.09, 0.10, 0.15, 0.18]
 	t_vector = time_vector(position_vector) 												# normalized time vector with equal time intervals (discrete values)
 
@@ -204,13 +204,13 @@ def main():
 	plt.plot(t_new, velocity_profile)				# ploting the velocity profile 
 	plt.show()										# comparing the velocity vector with its interpolation
 
-	plt.plot(t_vector, acceleration_vector)			# ploting the discrete acceleration 
-	plt.plot(t_new, acceleration_profile)			# ploting the acceleration profile 
-	plt.show()										# comparing the acceleration vector with its interpolation
+	# plt.plot(t_vector, acceleration_vector)			# ploting the discrete acceleration 
+	# plt.plot(t_new, acceleration_profile)			# ploting the acceleration profile 
+	# plt.show()										# comparing the acceleration vector with its interpolation
 
-	plt.plot(t_vector, jerk_vector)					# ploting the discrete jerk 
-	plt.plot(t_new, jerk_profile)					# ploting the jerk profile 
-	plt.show()										# comparing the jerk vector with its interpolation
+	# plt.plot(t_vector, jerk_vector)					# ploting the discrete jerk 
+	# plt.plot(t_new, jerk_profile)					# ploting the jerk profile 
+	# plt.show()										# comparing the jerk vector with its interpolation
 
 # =================================================================================================
 # -------------------------------------------------------------------------------------------------

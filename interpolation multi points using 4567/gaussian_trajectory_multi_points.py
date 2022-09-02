@@ -102,9 +102,9 @@ print("--- %s seconds ---" % (time.time() - start_time))
 # plt.show()
 
 
-# plt.plot(t, v_vector)
-# plt.plot(t_new, v_profile)
-# plt.show()
+plt.plot(t, v_vector)
+plt.plot(t_new, v_profile)
+plt.show()
 
 # plt.plot(t_new, a_profile)
 # plt.show()
