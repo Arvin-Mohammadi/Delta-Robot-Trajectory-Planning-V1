@@ -13,7 +13,7 @@ import time
 # =================================================================================================
 
 def ptp_duration(p_i, p_f, v_max, k):
-	T = (p_f - p_i)/v_max/(1/k - k)
+	T = (p_f - p_i)/(v_max*(1 - k))
 	return T
 
 def acc_duration(T, k):
@@ -40,7 +40,7 @@ def p_profile(t, v_max, a, p_i, T, T_a):
 
 	p_profile[0: n_a+1] 		= a/2*t[0: n_a+1]**2 + p_i
 	p_profile[n_a+1: -n_a-1]  	= a*T_a**2/2 + v_max*(t[n_a+1: -n_a-1] - T_a) + p_i
-	p_profile[-n_a-1:] 			= a*T_a**2/2 + v_max*(T - 2*T_a) + a/2*( (t[-n_a-1:])**2 - (T-T_a)**2 ) + p_i
+	p_profile[-n_a-1:] 			= a*T_a**2/2 + v_max*(T - 2*T_a) + a/2*(T - T_a)**2 - a*T*(T - T_a) + a*T*t[-n_a-1:] - a*t[-n_a-1:]**2/2 + p_i
 
 	return p_profile
 
@@ -83,7 +83,6 @@ def main():
 
 	plt.plot(time_profile, position_profile)
 	plt.show()
-
 
 # =================================================================================================
 # ---------------------------------------------------------------------------------------------

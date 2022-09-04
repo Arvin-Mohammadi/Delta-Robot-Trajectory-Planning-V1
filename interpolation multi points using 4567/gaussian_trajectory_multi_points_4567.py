@@ -17,7 +17,6 @@ start_time = time.time()
 def time_vector(position_vector): # done
 	position_vector = np.array(position_vector)
 	t = np.linspace(0, 1, position_vector.shape[0])   # assigning t vector with equal time intervals
-
 	return t
 	
 

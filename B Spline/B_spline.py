@@ -216,37 +216,37 @@ class PositionGenerator:
 # =================================================================================================
 # -- MAIN --------------------------------------------------------------------------------------
 # =================================================================================================
-# u = [0, 0, 0, 0, 1, 2, 4, 7, 7, 7, 7]
-# u_instant = 7
+u = [0, 0, 0, 0, 1, 2, 4, 7, 7, 7, 7]
+u_instant = 7
 
-# traj = BSpline([0], [0])
-# i = traj.which_span(u, u_instant, p=3)
-# # B = traj.get_basis_function(u, u_instant, i, p=3)
-# # print(B)
-# # print(i)
-# B_ders = traj.get_basis_function_derivative(u, u_instant, i, n=3, p=3)
-# # print(B_ders)
+traj = BSpline([0], [0])
+i = traj.which_span(u, u_instant, p=3)
+B = traj.get_basis_function(u, u_instant, i, p=3)
+print(B)
+print(i)
+B_ders = traj.get_basis_function_derivative(u, u_instant, i, n=3, p=3)
+print(B_ders)
 # # =================================================================================================
-# t = [0, 5, 7, 8, 10, 15, 18]
-# q = [3, -2, -5, 0, 6, 12, 8]
-# vi = 2
-# vf = -3
-# ai = 0
-# af = 0
-# traj = BSpline(q, t)
-# u = traj.get_u_vector(t)
-# A = traj.get_A_matrix(u)
-# c = traj.get_c_matrix(vi, ai, vf, af)
-# print(A)
-# print(c)
-# p = traj.get_P(A, c)
-# print(p)
+t = [0, 5, 7, 8, 10, 15, 18]
+q = [3, -2, -5, 0, 6, 12, 8]
+vi = 2
+vf = -3
+ai = 0
+af = 0
+traj = BSpline(q, t)
+u = traj.get_u_vector(t)
+A = traj.get_A_matrix(u)
+c = traj.get_c_matrix(vi, ai, vf, af)
+print(A)
+print(c)
+p = traj.get_P(A, c)
+print(p)
 # =================================================================================================
-generator = PositionGenerator(0.3, [0, 0, 0])
-q = generator.cart_position()[:, 0]
-vi = 0 
-ai = 0 
-vf = 0 
-af = 0 
+# generator = PositionGenerator(0.3, [0, 0, 0])
+# q = generator.cart_position()[:, 0]
+# vi = 0 
+# ai = 0 
+# vf = 0 
+# af = 0 
 
-c = np.zeros((q.shape[0] + 4))
+# c = np.zeros((q.shape[0] + 4))
