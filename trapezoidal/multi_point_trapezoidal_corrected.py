@@ -5,8 +5,10 @@
 
 import numpy as np 
 import math 
+from math import isclose
 import matplotlib.pyplot as plt 
 import time 
+from scipy.signal import argrelextrema
 
 # =================================================================================================
 # -- MOTION KINEMATICS FUNCTIONS - POINT TO POINT -------------------------------------------------
@@ -17,77 +19,48 @@ def ptp_duration(time_profile, k):
 	T_a = T*k 
 	return T, T_a
 
-
-def acc(v_max, T_a):
+def find_acceleration(v_max, T_a):
 	return v_max/T_a
-
-
-def ptp_p_profile(time_profile, v_max, a, p_i, T, T_a):
-	position_profile = np.zeros(time_profile.shape)
-
-	n_a = 0 
-	for idx, t_idx in enumerate(time_profile):
-		if t_idx <= T_a:
-			n_a = idx 
-		else:
-			break
-
-	position_profile[0: n_a+1] 		= a/2*time_profile[0: n_a+1]**2 + p_i
-	position_profile[n_a+1: -n_a-1]  	= a*T_a**2/2 + v_max*(time_profile[n_a+1: -n_a-1] - T_a) + p_i
-	position_profile[-n_a-1:] 			= a*T_a**2/2 + v_max*(T - 2*T_a) + a/2*(T - T_a)**2 - a*T*(T - T_a) + a*T*time_profile[-n_a-1:] - a*time_profile[-n_a-1:]**2/2 + p_i
-
-	return position_profile
-
-
-def ptp_v_profile(time_profile, v_max, a, T, T_a):
-	velocity_profile = np.zeros(time_profile.shape)
-
-	n_a = 0 
-	for idx, t_idx in enumerate(time_profile):
-		if t_idx <= T_a:
-			n_a = idx 
-		else:
-			break
-
-	velocity_profile[0: n_a+1] 		= a*time_profile[0: n_a+1] 
-	velocity_profile[n_a+1: -n_a-1]  	= v_max
-	velocity_profile[-n_a-1:] 			= a*(T - time_profile[-n_a-1:])
-	return velocity_profile
 
 # =================================================================================================
 # -- POINT TO POINT -------------------------------------------------------------------------------
 # =================================================================================================
 
-def ptp_velocity_profile(time_profile, position, v_max):
+def	ptp_v_profile(time_interval_profile, v_max, a, T, T_a):
 
-	p_i = position[0] 	# initial position 
-	p_f = position[1] 	# final position 
-	k = 0.5 			# T_a/T
+	velocity_profile = np.zeros(time_interval_profile.shape)
 
-	time_profile = time_profile[:] - time_profile[0]
+	n_a = 0 
 
-	T, T_a = ptp_duration(time_profile, k)		# duration of point to point movement from start to finish 
-	a = acc(v_max, T_a)						# returns the measure of acceleration
 
-	position_profile = ptp_p_profile(time_profile, v_max, a, p_i, T, T_a)		# returns the position profile
-	velocity_profile = ptp_v_profile(time_profile, v_max, a, T, T_a)			# returns velocity profile
 
-	return (velocity_profile, position_profile)
+	for idx, t_idx in enumerate(time_interval_profile):
+		if t_idx > T_a:
+			n_a = idx-1
+			break
+
+	velocity_profile[0: n_a] 		= a*time_interval_profile[0: n_a]
+	velocity_profile[n_a: -n_a]  	= v_max
+	velocity_profile[-n_a:] 		= a*(T - time_interval_profile[-n_a:])
+	# velocity_profile[n_a] = 1
+
+	return velocity_profile
+
 
 # =================================================================================================
 # -- MOTION KINEMATICS FUNCTIONS - MULTI POINT ----------------------------------------------------
 # =================================================================================================
 
-def find_time_vector(position):
+def find_time_vector(position):	# OUTPUTS: equally distanced points in time in interval [0, 1] 
 	position = np.array(position)
 	time_vector = np.linspace(0, 1, position.shape[0])
 	return time_vector
 
 
-def find_v_max(time, position):
+def find_v_max(time, position):	# OUTPUTS: the v_max in time intervals [t_i, t_(i+1)]
 	time = np.array(time)
 	position = np.array(position)
-	v_max = np.zeros(time.shape)
+	v_max = np.zeros(time.shape[0])
 
 	for idx, time_idx in enumerate(time[:-1]):
 		v_max[idx] = 2*(position[idx+1] - position[idx])/(time[idx+1] - time[idx])
@@ -95,22 +68,23 @@ def find_v_max(time, position):
 	return v_max 
 
 
-def find_time_profile(time):
+def find_time_profile(time): # OUTPUTS: a time profile based on the time vector [0, T] with the accuracy of 0.01 milisecond
 	time = np.array(time)
 	time_new = np.arange(0, 1000*time[-1]+1, 1)/1000
 	return time_new
 
 
-def find_idx(time, time_new):
-	time_old_idx = np.zeros(time.shape)
+def find_idx(time, time_new): # OUTPUTS: the index of "time-vector-elements" inside time profile
+	time_idx = np.zeros(time.shape)
 
-	counter = 0 
-	for idx, time_new_idx in enumerate(time_new):
-		if abs(time_new_idx - time[counter]) < 10**(-3):
-			time_old_idx[counter] = int(idx)
+	counter = 0
+	for i, e in enumerate(time_new):
+		if e>=time[counter]:
+			time_idx[counter] = i
 			counter += 1
 
-	return time_old_idx
+	return time_idx
+
 
 def bridge_idx(velocity_profile, v_max):
 	v_max_i 	= v_max[0]
@@ -118,6 +92,7 @@ def bridge_idx(velocity_profile, v_max):
 	a = 0 
 	b = velocity_profile.shape[0] - 1
 
+	print(v_max)
 	if (v_max_i>0) and (v_max_ip1>0):
 		if 	v_max_i <= v_max_ip1:
 			for idx, v_idx in enumerate(velocity_profile[:-1]):
@@ -126,7 +101,7 @@ def bridge_idx(velocity_profile, v_max):
 					break
 		elif v_max_i > v_max_ip1:
 			for idx, v_idx in enumerate(velocity_profile[:-1]):
-				if velocity_profile[idx+1] < v_max_ip1:
+				if velocity_profile[idx+1] <= v_max_ip1:
 					a = idx
 					break
 	elif (v_max_i<0) and (v_max_ip1<0):
@@ -142,42 +117,57 @@ def bridge_idx(velocity_profile, v_max):
 					break
 	return (a, b)
 
-
 # =================================================================================================
 # -- MULTI POINT ----------------------------------------------------------------------------------
 # =================================================================================================
 
-def find_velocity_profile(time_vector, position_vector, v_max_vector, time_profile):
+def find_velocity_profile(time_vector, position_vector, v_max_vector, time_profile): # OUTPUTS: the velocity profile and position profile
 	time_index = find_idx(time_vector, (time_profile))
 	velocity_profile = np.zeros(time_profile.shape)
 	position_profile = np.zeros(time_profile.shape)
-	counter = 0
+
+
+	k = 0.5 # k = T_a/T
+	
 	for idx, time_idx in enumerate(time_vector[:-1]):
+		idx_i 	= int(time_index[idx])
+		idx_ip1 = int(time_index[idx+1])
 
-		temp_position 	= position_vector[idx:idx+2]										# initial and final position in time interval number i (encoded as idx)
-		temp_time 		= time_vector[idx: idx+2]											# initial and final time in time interval number i (encoded as idx)
-		temp_time_new 	= time_profile[int(time_index[idx]): int(time_index[idx+1])+1] 		# time profile in time interval number i (encoded as idx)
-		
-		temp_velocity, temp_position = ptp_velocity_profile(temp_time_new, temp_position, v_max_vector[idx])	# calculating the velocity profile in time interval number i (encoded as idx)
+		# defining time intervals
+		time_interval_profile = np.copy(time_profile[idx_i:idx_ip1+1])
+		time_interval_profile -= time_interval_profile[0] 
 
-		velocity_profile[counter:counter+temp_velocity.shape[0]] = temp_velocity
-		position_profile[counter:counter+temp_velocity.shape[0]] = temp_position
+		v_max = v_max_vector[idx]							# v_max with in time interval 
 
-		counter += temp_velocity.shape[0]-1
+		T, T_a 	= ptp_duration(time_vector[idx:idx+2], k) 	# duration of point to point movement from start to finish 
+		a 		= find_acceleration(v_max, T_a) 			# returns the measure of acceleration within time interval
+
+		velocity_profile[idx_i:idx_ip1+1] = ptp_v_profile(time_interval_profile, v_max, a, T, T_a)
+
+		velocity_profile[idx_i] = 0
+		velocity_profile[idx_ip1] = 0
+
+
+	time_step = 1e-03
+	current_pos = position_vector[0]
+	for idx, v in enumerate(velocity_profile[1:]):
+		current_pos += v*time_step
+		position_profile[idx+1] = current_pos
 
 	return (velocity_profile, position_profile)
 
 
-def modify_velocity_profile(time_profile, velocity_profile, v_max_vector):
-	
+def modify_velocity_profile(time_profile, velocity_profile, v_max_vector, p0):
+
+	position_profile = np.zeros(time_profile.shape)
+
 	v_max_idx_vector = np.zeros(v_max_vector.shape) # index of v max in v profile
 	
-	print(v_max_vector)
+	# print(v_max_vector)
 
 	counter = 0
 	for idx, v_idx in enumerate(velocity_profile):
-		print(v_idx, v_max_vector[counter])
-		if abs(v_idx - v_max_vector[counter]) < 10**(-8):
+		if abs(v_idx - v_max_vector[counter]) < 10**(-10):
 			v_max_idx_vector[counter] = int(idx)
 			counter += 1
 
@@ -185,13 +175,13 @@ def modify_velocity_profile(time_profile, velocity_profile, v_max_vector):
 	for idx, v_max_idx in enumerate(v_max_vector[:-1]):
 		if (v_max_vector[idx]>0) and (v_max_vector[idx+1]>0):
 
-			a, b = bridge_idx(velocity_profile[int(v_max_idx_vector[idx]):int(v_max_idx_vector[idx+1])+1], v_max_vector[idx:idx+2])
+			a, b = bridge_idx(velocity_profile[int(v_max_idx_vector[idx]):int(v_max_idx_vector[idx+1])+3], v_max_vector[idx:idx+2])
 			a += int(v_max_idx_vector[idx])
 			b += int(v_max_idx_vector[idx])
 			
 			velocity_profile[a:b] = min(v_max_vector[idx], v_max_vector[idx+1])
 		elif (v_max_vector[idx]<0) and (v_max_vector[idx+1]<0):
-			a, b = bridge_idx(velocity_profile[int(v_max_idx_vector[idx]):int(v_max_idx_vector[idx+1])+1], v_max_vector[idx:idx+2])
+			a, b = bridge_idx(velocity_profile[int(v_max_idx_vector[idx]):int(v_max_idx_vector[idx+1])+3], v_max_vector[idx:idx+2])
 			a += int(v_max_idx_vector[idx])
 			b += int(v_max_idx_vector[idx])
 			
@@ -199,35 +189,44 @@ def modify_velocity_profile(time_profile, velocity_profile, v_max_vector):
 		else:
 			pass
 
-	return velocity_profile
+
+	time_step = 1e-03
+	current_pos = p0
+	for idx, v in enumerate(velocity_profile[1:]):
+		current_pos += v*time_step
+		position_profile[idx+1] = current_pos
+
+	return (velocity_profile, position_profile)
 
 # =================================================================================================
 # -- MAIN -----------------------------------------------------------------------------------------
 # =================================================================================================
 
-def main():
-
-	# constants
-	position_vector = [0, 0.02, 0.05, 0.0]		# the position we want EE to cross
+def main(position_vector):
 
 	# the vectors 
 	time_vector = find_time_vector(position_vector)			# define the time vector (equally distanced times)
 	v_max_vector = find_v_max(time_vector, position_vector)	# calculate v_max in each time interval
 
 	# porfiles
-	time_profile = find_time_profile(time_vector) 															# returns (new time profile (miliseconds), index of the time vector elements in the time profile)
+	time_profile = find_time_profile(time_vector)																				# returns (new time profile (miliseconds), index of the time vector elements in the time profile)
 	velocity_profile, position_profile = find_velocity_profile(time_vector, position_vector, v_max_vector, time_profile)		# vector profile (trapezoidal)
 
+	velocity_profile_new, position_profile_new = modify_velocity_profile(time_profile, np.copy(velocity_profile), v_max_vector, position_vector[0])
+
 	plt.plot(time_profile, velocity_profile)
-
-	velocity_profile_new = modify_velocity_profile(time_profile, np.copy(velocity_profile), v_max_vector)
-
 	plt.plot(time_profile, velocity_profile_new)
 	plt.show()
-
+	plt.plot(time_profile, position_profile)
+	plt.plot(time_profile, position_profile_new)
+	plt.show()
 
 # =================================================================================================
 # -------------------------------------------------------------------------------------------------
 # =================================================================================================
 
-main()
+main([0, 0.05])
+main([0, 0.02, 0.05, 0.0])
+main([0, 0.02, 0.03, 0.05, -0.03, 0.0])
+main([0, 0.02, 0.05, 0.04, -0.02, -0.08, 0.0])
+main([0, 0.02, 0.05, 0.04, -0.02, -0.06, -0.08, -0.05, 0.0])
