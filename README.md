@@ -2,7 +2,7 @@
 
 ![delta robot](https://www.linearmotiontips.com/wp-content/uploads/2016/01/Delta-Robot-Diagram.jpg)
 
-this will be a step by step demonstration of how to control trajectory of a Delta robot End-Effector
+this will be a step by step demonstration of how I experimented the different methods of trajectory planning for a Delta Parallel robot End-Effector
 check out my [telegram channel](https://t.me/engineering_stuff_69)
 
 # 1 - ROBOTICS (INVERSE AND FORWARD KINEAMTICS)
@@ -34,7 +34,7 @@ you can see my [python implementation of IK](https://github.com/ArthasMenethil-A
 - [method 1](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/inverse%20and%20forward%20kinematics/IK_method_1.py)
 - [method 2](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/inverse%20and%20forward%20kinematics/IK_method_2.py)
 
-# 2 - POINT TO POINT MOVEMENT
+# 2 - POINT TO POINT MOVEMENT (USING POLYNOMIAL INTERPOLATION)
 this section is dedicated to answer how should you go about writing a code for point to point movement (moving the EE from point 1 to point 2 in 3d space )
 
 ### theory
@@ -75,6 +75,8 @@ for the IK we have the equations as followed
 - $p_z = a \sin(\theta_{2i}) + b \sin(\theta_{3i}) \sin(\theta_{2i} + \theta_{1i})$       (equation 3)
 
 from these equation we solve for $\theta_{ij}$ (solution of IK) and solve for $p_x, p_y, p_z$ (solution of FK)
+
+further explanation in the following pdf that i've written according the mentioned references: [jacobian, IK and FK]()
 
 1. [what is Jacobian matrix and how it is calculated](https://www.sciencedirect.com/science/article/pii/S1877050918309876)
 2. [how jacobian matrix is used in delta robot trajectory palanning](http://jai.front-sci.com/index.php/jai/article/view/505)
