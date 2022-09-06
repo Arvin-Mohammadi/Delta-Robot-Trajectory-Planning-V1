@@ -76,7 +76,7 @@ for the IK we have the equations as followed
 
 from these equation we solve for $\theta_{ij}$ (solution of IK) and solve for $p_x, p_y, p_z$ (solution of FK)
 
-further explanation in the following pdf that i've written according the mentioned references: [jacobian, IK and FK]()
+further explanation in the following pdf that i've written according the mentioned references: [jacobian, IK and FK](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/theory/jacobian%20calculations.pdf)
 
 1. [what is Jacobian matrix and how it is calculated](https://www.sciencedirect.com/science/article/pii/S1877050918309876)
 2. [how jacobian matrix is used in delta robot trajectory palanning](http://jai.front-sci.com/index.php/jai/article/view/505)
