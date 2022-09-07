@@ -87,4 +87,25 @@ further explanation in the following pdf that i've written according the mention
 - [jacobian file: IK, FK, jacobian matrix calculation](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/inverse%20and%20forward%20kinematics/IK_method_2.py)
 
 # 3 - TRAPEZOIDAL TRAJECTORY PLANNING
-  
+
+In Trapezoidal method we have 3 phases, 
+- Phase 1: constant positive acceleration
+- Phase 2: constant velocity
+- Phase 3: constant negetive acceleration
+
+\begin{align*}
+&V=\begin{cases}
+at,\quad 0\leqt\leq T_a\\
+v_{max},\quad T_a\leqt\leq T-T_a\\
+a(T-t),\quad T-T_a\leq t \leq T
+\end{cases}
+\end{align*}
+
+![trapezoidal point to point diagram](https://i.ibb.co/ThMntMN/Untit654led.png)
+
+
+## Trapezoidal point to point movement 
+
+
+
+## Trapezoidal multi poitn movement 
