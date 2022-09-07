@@ -93,10 +93,7 @@ In Trapezoidal method we have 3 phases,
 - Phase 2: constant velocity
 - Phase 3: constant negetive acceleration
 
-$
-V=\sin(x)
-$
-
+$V=\sin(x)$
 ![trapezoidal point to point diagram](https://i.ibb.co/ThMntMN/Untit654led.png)
 
 
