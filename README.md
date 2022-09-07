@@ -93,9 +93,9 @@ In Trapezoidal method we have 3 phases,
 - Phase 2: constant velocity
 - Phase 3: constant negetive acceleration
 
-$V = a.t for 0 \leq t \leq T_a$ 
-$V = V_{max}$
-$V = -a.t for 0 <= $
+$V = a.t \quad for \quad 0 \leq t \leq T_a$ \\ 
+$V = V_{max} \quad for \quad T_a \leq t \leq T - T_a$ \\
+$V = -a.t \quad for \quad T-T_a \leq t \leq T$ \\
 
 
 ![trapezoidal point to point diagram](https://i.ibb.co/ThMntMN/Untit654led.png)
