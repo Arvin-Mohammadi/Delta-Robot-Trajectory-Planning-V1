@@ -88,6 +88,10 @@ further explanation in the following pdf that i've written according the mention
 
 # 3 - TRAPEZOIDAL TRAJECTORY PLANNING
 
+a very common method to obtain trajectoryies with a continuous velocity profile is to use linear motions with parabolic blends, characterized therefore by the typical trapezoidal velocity profiles.
+
+## Trapezoidal point to point movement 
+
 In Trapezoidal method we have 3 phases, 
 - Phase 1: constant positive acceleration
 - Phase 2: constant velocity
@@ -100,9 +104,6 @@ $V = -a.t \quad for \quad T-T_a \leq t \leq T$ <br />
 
 ![trapezoidal point to point diagram](https://i.ibb.co/ThMntMN/Untit654led.png)
 
+## Trapezoidal multi point movement 
 
-## Trapezoidal point to point movement 
-
-
-
-## Trapezoidal multi poitn movement 
+![Trapezoidal through a sequence of points](https://i.ibb.co/DMrJSpn/U648ntitled.png)
