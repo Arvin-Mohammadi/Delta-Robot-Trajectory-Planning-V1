@@ -93,8 +93,7 @@ In Trapezoidal method we have 3 phases,
 - Phase 2: constant velocity
 - Phase 3: constant negetive acceleration
 
-$V=\begin{cases}
-at,\quad 0\leqt\leq T_a\\
+$V=\begin{cases}و at,\quad 0\leqt\leq T_a\\$
 v_{max},\quad T_a\leqt\leq T-T_a\\
 a(T-t),\quad T-T_a\leq t \leq T
 \end{cases}$
