@@ -128,7 +128,7 @@ class Jacobian:
 t = np.linspace(0, 1, 1000)
 gamma = t*2*np.pi 
 x = 0.1*np.cos(gamma)
-y = 0.1*np.sin(gamma) 
+y = 0.1*np.sin(gamma)
 z = -0.35
 
 x_dot = 0.1*2*np.pi*(-np.sin(gamma))
