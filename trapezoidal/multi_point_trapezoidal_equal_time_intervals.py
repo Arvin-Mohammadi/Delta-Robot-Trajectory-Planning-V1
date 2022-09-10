@@ -35,6 +35,7 @@ class InverseKinematics:
 		self.F1_position = ([[0, 0, 0], [0, 0, 0], [0, 0, 0]])
 		J1_position = ([[0, 0, 0], [0, 0, 0], [0, 0, 0]])
 
+
 		for i in [0, 1, 2]:
 
 			alpha = self.alpha[i]
@@ -73,6 +74,7 @@ class InverseKinematics:
 			z = c1 + c2*y
 
 			J1_position[i] = [0, y, z]
+			
 
 		return J1_position
 
@@ -331,11 +333,11 @@ def main(position_vector):
 	velocity_profile_final, position_profile_final = finalized_velocity_profile(time_profile, np.copy(velocity_profile_new), v_max_vector, position_vector[0]) 	# the final velocity and position profile with the bridge shortened
 
 	plt.plot(time_profile, velocity_profile)
-	plt.plot(time_profile, velocity_profile_new)
+	#plt.plot(time_profile, velocity_profile_new)
 	plt.plot(time_profile, velocity_profile_final)
 	plt.show()
 	plt.plot(time_profile, position_profile)
-	plt.plot(time_profile, position_profile_new)
+	#plt.plot(time_profile, position_profile_new)
 	plt.plot(time_profile, position_profile_final)
 	plt.plot(time_vector, position_vector, 'ro')
 	plt.show()
@@ -343,26 +345,31 @@ def main(position_vector):
 
 
 # =================================================================================================
-# -------------------------------------------------------------------------------------------------
+# -- TEST 1 ---------------------------------------------------------------------------------------
 # =================================================================================================
-# theta = np.linspace(0, 2*np.pi, 100)
-# x = np.cos(theta)*0.030 - 0.03
-# y = np.sin(theta)*0.030
-# z = -0.035
-
-# angle1 = []
-# for i in range(10):
-# 	inverse = InverseKinematics([x[i], y[i], z])
-# 	J1 = inverse.get_J1_positions()
-# 	temp_theta = inverse.get_theta(J1)
-# 	angle1.append(temp_theta[0])
-
-# main(x)
-
-
 
 main([0, 0.05])
 main([0, 0.02, 0.05, 0.0])
 main([0, 0.02, 0.03, 0.05, -0.03, 0.0])
 main([0, 0.02, 0.05, 0.04, -0.02, -0.08, 0.0])
 main([0, 0.02, 0.05, 0.04, -0.02, -0.06, -0.08, -0.05, 0.0])
+
+# =================================================================================================
+# -- TEST 2 ---------------------------------------------------------------------------------------
+# =================================================================================================
+
+theta = np.linspace(0, 2*np.pi, 100)
+x = np.cos(theta)*0.30
+y = np.sin(theta)*0.30
+z = -0.35
+
+angle1 = []
+for i in range(100):
+	inverse = InverseKinematics([x[i], y[i], z])
+
+	J1 = inverse.get_J1_positions()
+
+	temp_theta = inverse.get_theta(J1)
+	angle1.append(temp_theta[0])
+
+main(x)
