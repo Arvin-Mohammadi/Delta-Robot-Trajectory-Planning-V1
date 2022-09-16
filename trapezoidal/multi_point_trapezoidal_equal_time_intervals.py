@@ -316,7 +316,7 @@ def finalized_velocity_profile(time_profile, velocity_profile, v_max_vector, p0)
 # -- MAIN -----------------------------------------------------------------------------------------
 # =================================================================================================
 
-def main(position_vector):
+def main(position_vector, plot_counter):
 
 	# the vectors 
 	time_vector = find_time_vector(position_vector)			# define the time vector (equally distanced times)
@@ -330,39 +330,58 @@ def main(position_vector):
 
 	velocity_profile_final, position_profile_final = finalized_velocity_profile(time_profile, np.copy(velocity_profile_new), v_max_vector, position_vector[0]) 	# the final velocity and position profile with the bridge shortened
 
-	plt.plot(time_profile, velocity_profile)
-	plt.plot(time_profile, velocity_profile_new)
-	plt.plot(time_profile, velocity_profile_final)
-	plt.show()
-	plt.plot(time_profile, position_profile)
-	plt.plot(time_profile, position_profile_new)
-	plt.plot(time_profile, position_profile_final)
-	plt.plot(time_vector, position_vector, 'ro')
-	plt.show()
+	fig = plt.figure()
+	fig.set_figheight(10)
+	fig.set_figwidth(10)
 
+
+	plt.subplot(211)
+	plt.grid(True)
+	plt.title("velocity-time plot", fontsize=20)
+	plt.xlabel("normalized time", fontsize=10)
+	plt.ylabel("velocity (m/s)", fontsize=15)
+	plt.plot(time_profile, velocity_profile, label="multi-point-trapezoidal")
+	plt.plot(time_profile, velocity_profile_final, label="modified-multi-point-trapezoidal")
+	plt.legend()
+
+	plot_counter += 1
+	plt.subplot(212)
+	plt.grid(True)
+	plt.title("position-time plot", fontsize=20)
+	plt.xlabel("normalized time", fontsize=10)
+	plt.ylabel("position (m)", fontsize=15)
+	plt.plot(time_profile, position_profile, label="multi-point-trapezoidal")
+	plt.plot(time_profile, position_profile_final, label="modified-multi-point-trapezoidal")
+	for idx, line in enumerate(position_vector):
+		temp_array = np.ones(time_vector.shape)*line
+		plt.plot(time_vector, temp_array, 'r--')
+	plt.legend()
+
+	# plt.savefig("multi_point_trapezoidal_" + str(plot_counter) + ".png")
+	plot_counter += 1
 
 
 # =================================================================================================
 # -------------------------------------------------------------------------------------------------
 # =================================================================================================
-theta = np.linspace(0, 2*np.pi, 100)
-x = np.cos(theta)*0.030 - 0.03
-y = np.sin(theta)*0.030
-z = -0.035
+# theta = np.linspace(0, 2*np.pi, 100)
+# x = np.cos(theta)*0.30 - 0.3
+# y = np.sin(theta)*0.30
+# z = -0.35
 
-angle1 = []
-for i in range(10):
-	inverse = InverseKinematics([x[i], y[i], z])
-	J1 = inverse.get_J1_positions()
-	temp_theta = inverse.get_theta(J1)
-	angle1.append(temp_theta[0])
+# angle1 = []
+# for i in range(10):
+# 	inverse = InverseKinematics([x[i], y[i], z])
+# 	J1 = inverse.get_J1_positions()
+# 	temp_theta = inverse.get_theta(J1)
+# 	angle1.append(temp_theta[0])
 
-main(x)
+# main(x)
 
 
-
-main([0, 0.05])
-main([0, 0.02, 0.05, 0.0])
-main([0, 0.02, 0.03, 0.05, -0.03, 0.0])
-main([0, 0.02, 0.05, 0.04, -0.02, -0.08, 0.0])
-main([0, 0.02, 0.05, 0.04, -0.02, -0.06, -0.08, -0.05, 0.0])
+plot_counter = 2
+# main([0, 0.05], plot_counter)
+# main([0, 0.02, 0.05, 0.0], plot_counter)
+main([0, 0.02, 0.03, 0.05, -0.03, 0.0], plot_counter)
+# main([0, 0.02, 0.05, 0.04, -0.02, -0.08, 0.0], plot_counter)
+main([0, 0.02, 0.05, 0.04, -0.02, -0.06, -0.08, -0.05, 0.0], plot_counter)
