@@ -345,19 +345,19 @@ def main(position_vector):
 # =================================================================================================
 # -------------------------------------------------------------------------------------------------
 # =================================================================================================
-# theta = np.linspace(0, 2*np.pi, 100)
-# x = np.cos(theta)*0.030 - 0.03
-# y = np.sin(theta)*0.030
-# z = -0.035
+theta = np.linspace(0, 2*np.pi, 100)
+x = np.cos(theta)*0.030 - 0.03
+y = np.sin(theta)*0.030
+z = -0.035
 
-# angle1 = []
-# for i in range(10):
-# 	inverse = InverseKinematics([x[i], y[i], z])
-# 	J1 = inverse.get_J1_positions()
-# 	temp_theta = inverse.get_theta(J1)
-# 	angle1.append(temp_theta[0])
+angle1 = []
+for i in range(10):
+	inverse = InverseKinematics([x[i], y[i], z])
+	J1 = inverse.get_J1_positions()
+	temp_theta = inverse.get_theta(J1)
+	angle1.append(temp_theta[0])
 
-# main(x)
+main(x)
 
 
 
