@@ -316,7 +316,7 @@ def finalized_velocity_profile(time_profile, velocity_profile, v_max_vector, p0)
 # -- MAIN -----------------------------------------------------------------------------------------
 # =================================================================================================
 
-def main(position_vector, plot_counter):
+def main(position_vector):
 
 	# the vectors 
 	time_vector = find_time_vector(position_vector)			# define the time vector (equally distanced times)
@@ -344,7 +344,6 @@ def main(position_vector, plot_counter):
 	plt.plot(time_profile, velocity_profile_final, label="modified-multi-point-trapezoidal")
 	plt.legend()
 
-	plot_counter += 1
 	plt.subplot(212)
 	plt.grid(True)
 	plt.title("position-time plot", fontsize=20)
@@ -357,8 +356,8 @@ def main(position_vector, plot_counter):
 		plt.plot(time_vector, temp_array, 'r--')
 	plt.legend()
 
-	# plt.savefig("multi_point_trapezoidal_" + str(plot_counter) + ".png")
-	plot_counter += 1
+	plt.savefig("multi_point_trapezoidal_2.png")
+	
 
 
 # =================================================================================================
@@ -379,9 +378,8 @@ def main(position_vector, plot_counter):
 # main(x)
 
 
-plot_counter = 2
 # main([0, 0.05], plot_counter)
 # main([0, 0.02, 0.05, 0.0], plot_counter)
-main([0, 0.02, 0.03, 0.05, -0.03, 0.0], plot_counter)
+# main([0, 0.02, 0.03, 0.05, -0.03, 0.0])
 # main([0, 0.02, 0.05, 0.04, -0.02, -0.08, 0.0], plot_counter)
-main([0, 0.02, 0.05, 0.04, -0.02, -0.06, -0.08, -0.05, 0.0], plot_counter)
+main([0, 0.02, 0.05, 0.04, -0.02, -0.06, -0.08, -0.05, 0.0])
