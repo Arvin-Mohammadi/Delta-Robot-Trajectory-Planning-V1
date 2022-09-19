@@ -131,7 +131,6 @@ Computation of the coefficient for assigned initial and final velocities and acc
  
 ![cubic-spline](https://i.postimg.cc/mZMH05QN/cubic-spline-2.png)
 
-
 ### source
 cubic spline (book Trajectory Planning for Automatix Machines and Robots by Luigi Biagiotti and Claudio Melchiorri)
 1. cubic spline with assigned initial and final velocities (part 4.4.1)
@@ -139,10 +138,23 @@ cubic spline (book Trajectory Planning for Automatix Machines and Robots by Luig
 3. smoothing cubic spline (part 4.4.5)
 
 ## Trapezoidal - multi-points
-
 a very common method to obtain trajectoryies with a continuous velocity profile is to use linear motions with parabolic blends, characterized therefore by the typical trapezoidal velocity profiles.
 
 ![Trapezoidal through a sequence of points](https://i.ibb.co/DMrJSpn/U648ntitled.png)
+
+To achieve something like this first we need to initiate a form of velocity prfile and then modify it 
+
+### Python Implementation
+If the method from point to point trapezoidal movement is used directly for multi-point, velocity becomes zero quite often and in every pre-defined point in the path, which is not acceptable. this kind of behaviour can be seen in the plot below:
+
+![trapezoidal multi-point unmodified](https://i.postimg.cc/BQHS917f/trapezoidal-multi-point-1.png)
+
+[\textbf{Theory and algorithm of modifying the velocity profile above}](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/theory/report.pdf)
+
+after modifying this velocity profile we get the following plots: 
+
+![trapezoidal multi-point modified 1](https://i.postimg.cc/JzHhh2zv/multi-point-trapezoidal-1.png)
+![trapezoidal multi-point modified 2](https://i.postimg.cc/JrVssMJq/multi-point-trapezoidal-2.png)
 
 ## Jacobian
 The jacobian matrix relates velocity of EE to the velocity of actuator joints with the relation: $\vec{v} = J \dot{\vec{\theta}}$
