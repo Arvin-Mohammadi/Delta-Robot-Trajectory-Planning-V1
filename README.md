@@ -39,11 +39,7 @@ you can see my [python implementation of IK](https://github.com/ArthasMenethil-A
 this section is dedicated to answer how should you go about writing a code for point to point movement (moving the EE from point 1 to point 2 in 3d space )
 
 ## 3-4-5 Polynomial Interpolation
-In order to represent each joint motion, a fifth-order polynomial s(τ ) is used
-here. meaning that, if θ0 and θ1 and the corresponding time instants of t0 and
-t1 are given, the path between them can be interpolated by use of a fifth order
-polynomial that outputs a predicted θ_pred (t) that t ∈ [t0 , t1 ]
-
+In order to represent each joint motion, a fifth-order polynomial $s(\tau)$ is used here. meaning that, if $\theta_0$ and $\theta_1$ and the corresponding time instants of $t_0$ and $t_1$ are given, the path between them can be interpolated by use of a fifth order polynomial that outputs a predicted $\theta_{pred}(t)$ that $t \ \in \ [t_0, \ t_1]$
 ### theory
 3-4-5 polynomial and 4-5-6-7 polynomial point to point movement, you can learn about this in the book ["Fundamentals of Robotic 
 Mechanical Systems, theory, methods, and Algorithms, Fourth Edition by Jorge Angeles - chapter 6"](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/theory/Angles_a3hfp_Fundamentals_of_Robotic.pdf)
