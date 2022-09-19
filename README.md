@@ -2,6 +2,7 @@
 
 ![delta robot](https://www.linearmotiontips.com/wp-content/uploads/2016/01/Delta-Robot-Diagram.jpg)
 
+for the complete report on the theory of delta parallel robot please refer to [my internship report](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/theory/report.pdf)
 this will be a step by step demonstration of how I experimented the different methods of trajectory planning for a Delta Parallel robot End-Effector
 check out my [telegram channel](https://t.me/engineering_stuff_69)
 
@@ -34,8 +35,14 @@ you can see my [python implementation of IK](https://github.com/ArthasMenethil-A
 - [method 1](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/inverse%20and%20forward%20kinematics/IK_method_1.py)
 - [method 2](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/inverse%20and%20forward%20kinematics/IK_method_2.py)
 
-# 2 - POINT TO POINT MOVEMENT (USING POLYNOMIAL INTERPOLATION)
+# 2 - POINT TO POINT MOVEMENT
 this section is dedicated to answer how should you go about writing a code for point to point movement (moving the EE from point 1 to point 2 in 3d space )
+
+## 3-4-5 Polynomial Interpolation
+In order to represent each joint motion, a fifth-order polynomial s(τ ) is used
+here. meaning that, if θ0 and θ1 and the corresponding time instants of t0 and
+t1 are given, the path between them can be interpolated by use of a fifth order
+polynomial that outputs a predicted θ_pred (t) that t ∈ [t0 , t1 ]
 
 ### theory
 3-4-5 polynomial and 4-5-6-7 polynomial point to point movement, you can learn about this in the book ["Fundamentals of Robotic 
