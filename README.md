@@ -6,7 +6,7 @@ for the complete report on the theory of delta parallel robot please refer to [m
 this will be a step by step demonstration of how I experimented the different methods of trajectory planning for a Delta Parallel robot End-Effector
 check out my [telegram channel](https://t.me/engineering_stuff_69)
 
-# 1 - ROBOTICS (INVERSE AND FORWARD KINEAMTICS)
+# ROBOTICS (INVERSE AND FORWARD KINEAMTICS)
 with trajectory planning there are two fundemental questions we need an answer for:
 1. given a specific location in the real world, what values should my robot's joint be set to in order to get the End-Effector there? (inverse kinematics)
 2. given the setting of my joints, where is my EE in real world coordinates? (forward kinematics)
@@ -35,7 +35,7 @@ you can see my [python implementation of IK](https://github.com/ArthasMenethil-A
 - [method 1](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/inverse%20and%20forward%20kinematics/IK_method_1.py)
 - [method 2](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/inverse%20and%20forward%20kinematics/IK_method_2.py)
 
-# 2 - POINT TO POINT MOVEMENT
+# MOTION PLANNING POINT-TO-POINT MOVEMENT
 this section is dedicated to answer how should you go about writing a code for point to point movement (moving the EE from point 1 to point 2 in 3d space )
 
 ## 3-4-5 Polynomial Interpolation
@@ -97,14 +97,23 @@ This is the resultant plot:
 
 ![trapezoidal point-to-point](https://i.postimg.cc/px1SvzkH/trapezoidal-ptp.png)
 
-# 3 - TRAJECTORY PLANNING (CUBIC SPLINE AND SIMILAR ALGORITHMS)
+## S-Curve 
+as a concept, s-curve is the better version of trapezoidal. strictly speaking, it has seven phases instead of three. as explained blow in mathemathis terms: 
+
+
+$a = J.t 			\quad for \quad T_0 \leq t \leq T_1$ <br />
+$a = a_{max} 			\quad for \quad T_1 \leq t \leq T_2$ <br />
+$a = J(T_3 - t) 		\quad for \quad T_2 \leq t \leq T_3$ <br />
+$a = 0				\quad for \quad T_3 \leq t \leq T_4$ <br />
+$a = -J(t - T_4)		\quad for \quad T_4 \leq t \leq T_5$ <br />
+$a = -a_{max} 			\quad for \quad T_5 \leq t \leq T_6$ <br />
+$a = -J(T_7 - t)		\quad for \quad T_6 \leq t \leq T_7$ <br />
+
+# MOTION PLANNING MULTI-POINT MOVEMENT
 this section is dedicated to planning out a specific trajectory for the robot to go through
 
-### theory
-cubic spline (book Trajectory Planning for Automatix Machines and Robots by Luigi Biagiotti and Claudio Melchiorri)
-1. cubic spline with assigned initial and final velocities (part 4.4.1)
-2. cubic spline with assigned intial and final velocities and acceleration (part 4.4.4)
-3. smoothing cubic spline (part 4.4.5)
+## Cubic-spline
+one way of interpolating a path of $n+1$ points in space, is by a polynomial of degree $n$. This way might work for 3 or 4 points, but fir higer degree polynomials it can be very computationally expensive. Another way which is much better in terms of computational power needed, is using $n$ polynomials of degree $p$ that $p << n$. The overall function $s(t)$ defined in this manner is called a spline of degree $p$.
 
 ### python implementation
 - CIRCLE MOVEMENT:
@@ -112,8 +121,20 @@ cubic spline (book Trajectory Planning for Automatix Machines and Robots by Luig
 
 - CIRCLE MOVEMENT:
   cubic spline with assigned initial and final velocities and acceleration --> [trajectory_planing_cubic_spline_4.4.4.py](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/trajectory%20planning%20-%20cubic%20splin%20(python)/trajectory_planning_cubic_spline_4.4.4.py)
+ 
+### source
+cubic spline (book Trajectory Planning for Automatix Machines and Robots by Luigi Biagiotti and Claudio Melchiorri)
+1. cubic spline with assigned initial and final velocities (part 4.4.1)
+2. cubic spline with assigned intial and final velocities and acceleration (part 4.4.4)
+3. smoothing cubic spline (part 4.4.5)
 
-# 2.5 - JACOBIAN
+## Trapezoidal - multi-points
+
+a very common method to obtain trajectoryies with a continuous velocity profile is to use linear motions with parabolic blends, characterized therefore by the typical trapezoidal velocity profiles.
+
+![Trapezoidal through a sequence of points](https://i.ibb.co/DMrJSpn/U648ntitled.png)
+
+## Jacobian
 The jacobian matrix relates velocity of EE to the velocity of actuator joints with the relation: $\vec{v} = J \dot{\vec{\theta}}$
 
 ### theory
@@ -133,10 +154,4 @@ further explanation in the following pdf that i've written according the mention
 ### python implementation
 
 - [jacobian file: IK, FK, jacobian matrix calculation](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/inverse%20and%20forward%20kinematics/IK_method_2.py)
-
-# 3 - TRAPEZOIDAL TRAJECTORY PLANNING
-
-a very common method to obtain trajectoryies with a continuous velocity profile is to use linear motions with parabolic blends, characterized therefore by the typical trapezoidal velocity profiles.
-
-![Trapezoidal through a sequence of points](https://i.ibb.co/DMrJSpn/U648ntitled.png)
 
