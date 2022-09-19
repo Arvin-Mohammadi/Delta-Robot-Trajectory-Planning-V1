@@ -40,17 +40,35 @@ this section is dedicated to answer how should you go about writing a code for p
 
 ## 3-4-5 Polynomial Interpolation
 In order to represent each joint motion, a fifth-order polynomial $s(\tau)$ is used here. meaning that, if $\theta_0$ and $\theta_1$ and the corresponding time instants of $t_0$ and $t_1$ are given, the path between them can be interpolated by use of a fifth order polynomial that outputs a predicted $\theta_{pred}(t)$ that $t \ \in \ [t_0, \ t_1]$
-### theory
-3-4-5 polynomial and 4-5-6-7 polynomial point to point movement, you can learn about this in the book ["Fundamentals of Robotic 
-Mechanical Systems, theory, methods, and Algorithms, Fourth Edition by Jorge Angeles - chapter 6"](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/theory/Angles_a3hfp_Fundamentals_of_Robotic.pdf)
+
+### Theory
+the polynomial is shown in the following form 
+$$s(\tau) = a\tau^5 + b\tau^4 + c\tau^3 + d\tau^2 + e\tau + f$$
+such that 
+$$0 \leq s \leq 1 \quad 0 \leq \tau \leq 1$$
+and 
+$$\tau = \frac{t}{T}$$
+we will thus aim at a normal polynomial that, upon scaling both its argument and the polynomial itself, will allow us to represent each of the joint variables $\theta_j$ throughout its range of motion so that: 
+$$\theta(t) = \theta_I + (\theta_F - \theta_I)s(\tau)$$
+and ($\dddot{\theta}, \ \ddot{\theta}, \ \dot{\theta}$) are calculated by defferentiating the above formula
+with the boundary conditions at 
+$$s(0), \ s^\prime (0), \ s^{\prime \prime} (0), \ s(1), \ s^\prime (1), \ s^{\prime \prime} (0)$$
 
 ### python implementation
 - POINT TO POINT MOVEMENT (3-4-5 polynomial):
   moveing from point to point in the direction desired --> [trajectory_planning_345.py](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/point%20to%20point%20movement%20(python)/trajectory_planning_345.py)
 
 ![345 point-to-point](https://i.ibb.co/TK8b9z8/345.png)
+
+## 4-5-6-7 Polynomial Interpolation
+
+### python implementation
 - POINT TO POINT MOVEMENT (4-5-6-7 polynomial):
   we repeat what we've done for sub-step 2 but with a 7th order polynomial --> [trajectory_planning_4567.py](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/point%20to%20point%20movement%20(python)/trajectory_planning_4567.py)
+
+### Source
+3-4-5 polynomial and 4-5-6-7 polynomial point to point movement, you can learn about this in the book ["Fundamentals of Robotic 
+Mechanical Systems, theory, methods, and Algorithms, Fourth Edition by Jorge Angeles - chapter 6"](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/theory/Angles_a3hfp_Fundamentals_of_Robotic.pdf)
 
 # 3 - TRAJECTORY PLANNING (CUBIC SPLINE AND SIMILAR ALGORITHMS)
 this section is dedicated to planning out a specific trajectory for the robot to go through
