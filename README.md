@@ -50,7 +50,7 @@ and
 $$\tau = \frac{t}{T}$$
 we will thus aim at a normal polynomial that, upon scaling both its argument and the polynomial itself, will allow us to represent each of the joint variables $\theta_j$ throughout its range of motion so that: 
 $$\theta(t) = \theta_I + (\theta_F - \theta_I)s(\tau)$$
-and ($\frac{d \theta}{dt}, \ \frac{d^2 \theta}{d t^2}, \ \frac{d^3 \theta}{d t^3}$) are calculated by defferentiating the above formula
+and $\frac{d \theta}{dt}, \ \frac{d^2 \theta}{d t^2}, \ \frac{d^3 \theta}{d t^3}$ are calculated by defferentiating the above formula
 with the boundary conditions at 
 $$s(0), \ s^\prime (0), \ s^{\prime \prime} (0), \ s(1), \ s^\prime (1), \ s^{\prime \prime} (0)$$
 
