@@ -73,12 +73,29 @@ we solve the system of question generated from the boudary conditions.
   
 ![4567 point-to-point](https://i.postimg.cc/Jhjp4yCM/4567.png)
 
-## Trapezoidal point to point movement
-
-
 ### Source
 3-4-5 polynomial and 4-5-6-7 polynomial point to point movement, you can learn about this in the book ["Fundamentals of Robotic 
 Mechanical Systems, theory, methods, and Algorithms, Fourth Edition by Jorge Angeles - chapter 6"](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/theory/Angles_a3hfp_Fundamentals_of_Robotic.pdf)
+
+## Trapezoidal point to point movement
+
+In Trapezoidal method we have 3 phases, 
+- Phase 1: constant positive acceleration
+- Phase 2: constant velocity
+- Phase 3: constant negetive acceleration
+
+$V = a.t \quad for \quad 0 \leq t \leq T_a$ <br />
+$V = V_{max} \quad for \quad T_a \leq t \leq T - T_a$ <br />
+$V = -a.t \quad for \quad T-T_a \leq t \leq T$ <br />
+
+![trapezoidal point to point diagram](https://i.ibb.co/ThMntMN/Untit654led.png)
+
+### Pytohn implementation
+you can find the codes related to trapezoidal point to poitn movement in [this source code](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/trapezoidal/point_to_points_trapezoidal.py)
+
+This is the resultant plot: 
+
+![trapezoidal point-to-point](https://i.postimg.cc/px1SvzkH/trapezoidal-ptp.png)
 
 # 3 - TRAJECTORY PLANNING (CUBIC SPLINE AND SIMILAR ALGORITHMS)
 this section is dedicated to planning out a specific trajectory for the robot to go through
@@ -121,20 +138,5 @@ further explanation in the following pdf that i've written according the mention
 
 a very common method to obtain trajectoryies with a continuous velocity profile is to use linear motions with parabolic blends, characterized therefore by the typical trapezoidal velocity profiles.
 
-## Trapezoidal point to point movement 
-
-In Trapezoidal method we have 3 phases, 
-- Phase 1: constant positive acceleration
-- Phase 2: constant velocity
-- Phase 3: constant negetive acceleration
-
-$V = a.t \quad for \quad 0 \leq t \leq T_a$ <br />
-$V = V_{max} \quad for \quad T_a \leq t \leq T - T_a$ <br />
-$V = -a.t \quad for \quad T-T_a \leq t \leq T$ <br />
-
-
-![trapezoidal point to point diagram](https://i.ibb.co/ThMntMN/Untit654led.png)
-
-## Trapezoidal multi point movement 
-
 ![Trapezoidal through a sequence of points](https://i.ibb.co/DMrJSpn/U648ntitled.png)
+
