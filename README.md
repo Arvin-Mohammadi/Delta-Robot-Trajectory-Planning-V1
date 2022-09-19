@@ -115,13 +115,23 @@ this section is dedicated to planning out a specific trajectory for the robot to
 ## Cubic-spline
 one way of interpolating a path of $n+1$ points in space, is by a polynomial of degree $n$. This way might work for 3 or 4 points, but fir higer degree polynomials it can be very computationally expensive. Another way which is much better in terms of computational power needed, is using $n$ polynomials of degree $p$ that $p << n$. The overall function $s(t)$ defined in this manner is called a spline of degree $p$.
 
+
 ### python implementation
 - CIRCLE MOVEMENT:
   cubic spline with assigned initial and final velocities --> [trajectory_planing_cubic_spline.py](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/trajectory%20planning%20-%20cubic%20splin%20(python)/trajectory_planning_cubic_spline.py)
-
+  
+Computation of the coefficient for assigned initial and final velocities plot:
+ 
+![cubic-spline](https://i.postimg.cc/QMt7wNbH/cubic-spline-1.png)
+ 
 - CIRCLE MOVEMENT:
   cubic spline with assigned initial and final velocities and acceleration --> [trajectory_planing_cubic_spline_4.4.4.py](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/trajectory%20planning%20-%20cubic%20splin%20(python)/trajectory_planning_cubic_spline_4.4.4.py)
+
+Computation of the coefficient for assigned initial and final velocities and acceleration plot:
  
+![cubic-spline](https://i.postimg.cc/mZMH05QN/cubic-spline-2.png)
+
+
 ### source
 cubic spline (book Trajectory Planning for Automatix Machines and Robots by Luigi Biagiotti and Claudio Melchiorri)
 1. cubic spline with assigned initial and final velocities (part 4.4.1)
