@@ -59,6 +59,9 @@ $$s(0), \ s^\prime (0), \ s^{\prime \prime} (0), \ s(1), \ s^\prime (1), \ s^{\p
 moveing from point to point in the direction desired --> [trajectory_planning_345.py](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/point%20to%20point%20movement%20(python)/trajectory_planning_345.py)
 
 <p>
+    <meta http-equiv="Content-Security-Policy" content="default-src *;
+   img-src * 'self' data: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' *;
+   style-src  'self' 'unsafe-inline' *">
     <img src="https://i.postimg.cc/V6KwfG7d/345.png" />
 </p>
 
