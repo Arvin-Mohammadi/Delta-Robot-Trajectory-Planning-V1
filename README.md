@@ -58,7 +58,9 @@ $$s(0), \ s^\prime (0), \ s^{\prime \prime} (0), \ s(1), \ s^\prime (1), \ s^{\p
 - POINT TO POINT MOVEMENT (3-4-5 polynomial):
 moveing from point to point in the direction desired --> [trajectory_planning_345.py](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/point%20to%20point%20movement%20(python)/trajectory_planning_345.py)
 
-![345.png](https://i.postimg.cc/V6KwfG7d/345.png)
+<p>
+    <img src="https://i.postimg.cc/V6KwfG7d/345.png" />
+</p>
 
 ## 4-5-6-7 Polynomial Interpolation
 The problem with 3-4-5 polynomial is that the jerk at the boundary can't be set to zero, for this problem we use a higher degree of polynomial, namely, 7-th deg polynomial.
