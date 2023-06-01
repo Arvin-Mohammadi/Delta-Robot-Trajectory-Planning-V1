@@ -71,7 +71,7 @@ we solve the system of question generated from the boudary conditions.
 - POINT TO POINT MOVEMENT (4-5-6-7 polynomial):
   we repeat what we've done for sub-step 2 but with a 7th order polynomial --> [trajectory_planning_4567.py](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/point%20to%20point%20movement%20(python)/trajectory_planning_4567.py)
   
-![4567 point-to-point]()
+![4567 point-to-point](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/raw_images/4567%20point-to-point.png)
 
 ### Source
 3-4-5 polynomial and 4-5-6-7 polynomial point to point movement, you can learn about this in the book ["Fundamentals of Robotic 
@@ -88,14 +88,14 @@ $V = a.t \quad for \quad 0 \leq t \leq T_a$ <br />
 $V = V_{max} \quad for \quad T_a \leq t \leq T - T_a$ <br />
 $V = -a.t \quad for \quad T-T_a \leq t \leq T$ <br />
 
-![trapezoidal point to point diagram]()
+![trapezoidal point to point diagram](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/raw_images/trapezoidal%20point%20to%20point%20diagram.png)
 
 ### Pytohn implementation
 you can find the codes related to trapezoidal point to poitn movement in [this source code](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/trapezoidal/point_to_points_trapezoidal.py)
 
 This is the resultant plot: 
 
-![trapezoidal point-to-point]()
+![trapezoidal point-to-point](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/raw_images/trapezoidal%20point-to-point.png)
 
 ## S-Curve 
 as a concept, s-curve is the better version of trapezoidal. strictly speaking, it has seven phases instead of three. as explained blow in mathemathis terms: 
@@ -122,14 +122,14 @@ one way of interpolating a path of $n+1$ points in space, is by a polynomial of 
   
 Computation of the coefficient for assigned initial and final velocities plot:
  
-![cubic-spline]()
+![cubic-spline](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/raw_images/cubic-spline.png)
  
 - CIRCLE MOVEMENT:
   cubic spline with assigned initial and final velocities and acceleration --> [trajectory_planing_cubic_spline_4.4.4.py](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/trajectory%20planning%20-%20cubic%20splin%20(python)/trajectory_planning_cubic_spline_4.4.4.py)
 
 Computation of the coefficient for assigned initial and final velocities and acceleration plot:
  
-![cubic-spline-2]()
+![cubic-spline-2](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/raw_images/cubic-spline-2.png)
 
 ### source
 cubic spline (book Trajectory Planning for Automatix Machines and Robots by Luigi Biagiotti and Claudio Melchiorri)
@@ -140,21 +140,21 @@ cubic spline (book Trajectory Planning for Automatix Machines and Robots by Luig
 ## Trapezoidal - multi-points
 a very common method to obtain trajectoryies with a continuous velocity profile is to use linear motions with parabolic blends, characterized therefore by the typical trapezoidal velocity profiles.
 
-![Trapezoidal through a sequence of points]()
+![Trapezoidal through a sequence of points](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/raw_images/Trapezoidal%20through%20a%20sequence%20of%20points.png)
 
 To achieve something like this first we need to initiate a form of velocity prfile and then modify it 
 
 ### Python Implementation
 If the method from point to point trapezoidal movement is used directly for multi-point, velocity becomes zero quite often and in every pre-defined point in the path, which is not acceptable. this kind of behaviour can be seen in the plot below:
 
-![trapezoidal multi-point unmodified]()
+![trapezoidal multi-point unmodified](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/raw_images/trapezoidal%20multi-point%20unmodified.png)
 
 [\textbf{Theory and algorithm of modifying the velocity profile above}](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/theory/report.pdf)
 
 after modifying this velocity profile we get the following plots: 
 
-![trapezoidal multi-point modified 1]()
-![trapezoidal multi-point modified 2]()
+![trapezoidal multi-point modified 1](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/raw_images/trapezoidal%20multi-point%20modified%201.png)
+![trapezoidal multi-point modified 2](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/raw_images/trapezoidal%20multi-point%20modified%202.png)
 
 ## Jacobian
 The jacobian matrix relates velocity of EE to the velocity of actuator joints with the relation: $\vec{v} = J \dot{\vec{\theta}}$
