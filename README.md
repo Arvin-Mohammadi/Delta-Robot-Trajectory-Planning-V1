@@ -4,9 +4,20 @@
 
 for the complete report on the theory of delta parallel robot please refer to [my internship report](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/theory/report.pdf)
 this will be a step by step demonstration of how I experimented the different methods of trajectory planning for a Delta Parallel robot End-Effector
-check out my [telegram channel](https://t.me/engineering_stuff_69)
 
-# ROBOTICS (INVERSE AND FORWARD KINEAMTICS)
+Overview: 
+- Inverse and Forward Kinematics 
+- Motion Planning (Point-To-Point)
+    - 3-4-5 Polynomial interpolation 
+    - 4-5-6-7 Polynomial interpolation 
+    - Trapeoidal
+- Motion Planning (Multi-Point)
+    - cubic-spline
+    - Trapezoidal 
+    - Jacobian (incomplete)
+
+
+# INVERSE AND FORWARD KINEAMTICS
 with trajectory planning there are two fundemental questions we need an answer for:
 1. given a specific location in the real world, what values should my robot's joint be set to in order to get the End-Effector there? (inverse kinematics)
 2. given the setting of my joints, where is my EE in real world coordinates? (forward kinematics)
