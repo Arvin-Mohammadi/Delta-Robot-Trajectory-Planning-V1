@@ -1,5 +1,7 @@
 # DELTA PARALLEL ROBOT
 
+The modified Version of this is in process: https://github.com/ArthasMenethil-A/Delta-Robot-Trajectory-Planning
+
 ![delta robot](https://www.linearmotiontips.com/wp-content/uploads/2016/01/Delta-Robot-Diagram.jpg)
 
 for the complete report on the theory of delta parallel robot please refer to [my internship report](https://github.com/ArthasMenethil-A/Delta_Robot/blob/main/theory/report.pdf)
