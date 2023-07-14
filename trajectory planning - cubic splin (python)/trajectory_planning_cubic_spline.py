@@ -304,6 +304,7 @@ point_positions = generator.cartesian_position() 	# generating the cartesian coo
 
 # calculating IK for the whole profile of movement
 theta = np.zeros(point_positions.shape)
+
 for idx, i in enumerate(point_positions):
 	inverse = InverseKinematics(i)
 	J1_position = inverse.get_J1_positions()
