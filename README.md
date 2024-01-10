@@ -1,6 +1,8 @@
 # DELTA PARALLEL ROBOT
 
-The modified Version of this is in process: https://github.com/ArthasMenethil-A/Delta-Robot-Trajectory-Planning
+This repository is old. The modified version is linked below:
+
+https://github.com/ArthasMenethil-A/Delta-Robot-Trajectory-Planning
 
 ![delta robot](https://www.linearmotiontips.com/wp-content/uploads/2016/01/Delta-Robot-Diagram.jpg)
 
