@@ -1,8 +1,6 @@
 # Delta Parallel Robot - Trajectory Planning
 ------
-<ins>**A word from me:**</ins> This repository is dedicated to studying the different trajectory planning methods (theory + practical). 
-
-Newer Version of This Repository is Available at [link](https://github.com/ArthasMenethil-A/Delta-Robot-Trajectory-Planning-V2)
+<ins>**A word from me:**</ins> This repository is dedicated to studying the different trajectory planning methods (theory + practical). Newer Version of This Repository is Available at [link](https://github.com/ArthasMenethil-A/Delta-Robot-Trajectory-Planning-V2)
 
 ![delta robot](https://www.linearmotiontips.com/wp-content/uploads/2016/01/Delta-Robot-Diagram.jpg)
 
