@@ -2,7 +2,7 @@
 ------
 
 <p align="center">
-    <a href="https://github.com/Arvin-Mohammadi/Delta-Robot-Trajectory-Planning-V3">UPDATE NEWEST VERSION</a>
+    <a href="https://github.com/Arvin-Mohammadi/Delta-Robot-Trajectory-Planning-V3">THIS LINK IS THE NEWEST VERSION</a>
 </p>
 
 ![delta robot](https://www.linearmotiontips.com/wp-content/uploads/2016/01/Delta-Robot-Diagram.jpg)
